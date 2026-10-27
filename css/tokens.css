@@ -1,0 +1,65 @@
+/* EstrelaGames · tokens do DS (Rjx31bgpOt4m1U8DVKyWtd · modo EstrelaGames), valores resolvidos 1:1 */
+:root{
+  color-scheme: dark;
+  /* background */
+  --bg-default:#0e141b; --bg-subtle:#141e2a; --bg-strong:#283c52; --bg-raised:#1e354d; --bg-inset:#010101; --bg-highlight:#ffffff14; --bg-chrome:#141e2a; --bg-divider:#1e354d; --bg-band:#00000052;
+  --bga-default-50:#0e141b80; --bga-default-75:#0e141bbf; --bga-subtle-50:#141e2a80; --bga-subtle-75:#141e2abf;
+  --bga-strong-25:#283c5240; --bga-strong-50:#283c5280; --bga-strong-75:#283c52bf;
+  --bga-secondary-16:#dab68229; --bga-secondary-32:#dab68252; --bga-accent-12:#ffc8411f;
+  /* border */
+  --border-muted:#ffffff14; --border-default:#283c52; --border-strong:#3d5167; --border-focus:#5e95ff;
+  --border-hl-top:#ffffff29; --border-gold-top:#fbdfade5; --border-gold-bottom:#b78d4f5c;
+  /* text */
+  --text-default:#edeeee; --text-muted:#b0b4b6; --text-link:#8fb8ff; --text-subtle:#7790ac; --text-disabled:#4c637c;
+  --text-brand:#dab682; --text-success:#52de7e; --text-error:#ff6b6e; --text-prize:#ffc841;
+  --text-on-color:#ffffff; --text-on-color-muted:#ffffffd9; --text-on-color-subtle:#ffffffb2; --text-on-light:#0e141b;
+  /* system */
+  --sys-info:#3b74f5; --sys-success:#2cc160; --sys-success-strong:#8cf0a9; --sys-warning:#ffbe2e; --sys-error:#ef4452;
+  --sysa-success-25:#2cc16040; --sysa-error-25:#ef445240; --sysa-info-25:#3b74f540;
+  --notification-error:#ef4452;
+  /* effects */
+  --hl-subtle:#ffffff29; --hl:#ffffff52; --hl-strong:#ffffff7a;
+  --shadow-faint:#0000001f; --shadow-subtle:#0000003d; --shadow:#00000066; --shadow-strong:#00000080;
+  --glow-info:#5e95ff52; --glow-accent:#ffbe2e52; --glow-success:#52de7ea3; --glow-gold:#dab68252; --glow-blue:#8fb8ff; --glow-red:#ff6b6e;
+  /* surfaces */
+  --surface-card-top:#141e2a; --surface-card-bottom:#0e141b; --surface-elevated-top:#1e354d; --surface-elevated-bottom:#141e2a;
+  /* buttons */
+  --btn-primary-top:#5e95ff; --btn-primary-bg:#2a57d6; --btn-secondary-border:#3b74f5;
+  --btn-disabled-top:#1e354d; --btn-disabled-bg:#1e354d; --btn-disabled-text:#4c637c;
+  /* tabs */
+  --tab-default-text:#b0b4b6; --tab-container:#283c52; --input-border:#283c52;
+  --tab-padrao:#5e95ff; --tab-padrao-tint:#5e94ff3d; --tab-rosa:#e93d82; --tab-rosa-tint:#e93d823d;
+  /* games */
+  --game-truco:#e5484d; --game-paulista:#3b74f5; --game-cacheta:#8752f2; --game-tranca:#2cc160; --game-buraco:#1f9a4a;
+  --game-poker:#0fa968; --game-sinuca:#2fa35a; --game-todos:#3b74f5; --game-domino:#14b8a6; --game-dama:#f76b15; --game-xadrez:#5b6cff;
+  --game-paulista-tint:#3b74f53d; --game-truco-tint:#e5484d3d; --game-cacheta-tint:#8752f23d; --game-buraco-tint:#1f9a4a3d;
+  /* crew */
+  --crew-engenheiro:#4fb3ff; --crew-comandante:#f5c542; --crew-piloto:#ff5a36; --crew-navegador:#e86bff; --crew-explorador:#4dffb8;
+  --crew-bar:#ff9f43; --crew-reis:#34d399; --crew-nobru:#3d8bff; --crew-inhui:#ff4fb0;
+  /* stake / table */
+  --stake-padrao-top:#2b4274; --stake-padrao-bottom:#17233b; --stake-iniciante-top:#1f9a4a; --stake-iniciante-bottom:#1f502c;
+  --table-card-top:#1f5a4a; --table-card-bottom:#0f2e2a; --table-stake:#ffc841;
+  --plus-bg:#52de7e; --plus-icon:#0e141b;
+  /* cards */
+  --card-face:#ffffff; --card-border:#9ea2a4; --suit-red:#c72c3d; --suit-black:#141922; --back-top:#1d3c9e; --back-bottom:#182b53;
+  /* seat timer */
+  --seat-timer-track:#ffffff1f; --seat-timer:#3b74f5;
+  /* type */
+  --f-display:"Sora", "Inter", system-ui, sans-serif;
+  --f-ui:"Inter", system-ui, -apple-system, sans-serif;
+  --f-call:"Industry", "Sora", sans-serif;
+}
+/* estilos de texto do DS */
+.t-d3xl{font:700 64px/1.2 var(--f-display);letter-spacing:-.02em}
+.t-d2xl{font:700 48px/1.2 var(--f-display);letter-spacing:-.02em}
+.t-dxl{font:700 40px/1.2 var(--f-display);letter-spacing:-.02em}
+.t-dl{font:700 32px/1.2 var(--f-display);letter-spacing:-.02em}
+.t-dm{font:700 24px/1.2 var(--f-display);letter-spacing:-.01em}
+.t-ds{font:700 20px/1.2 var(--f-display);letter-spacing:-.01em}
+.t-dxs{font:600 16px/1.2 var(--f-display)}
+.t-d2xs{font:600 14px/1.2 var(--f-display)}
+.t-d3xs{font:600 12px/1.2 var(--f-display)}
+.t-hm{font:700 20px/1.2 var(--f-ui)}
+.t-ll{font:500 16px/1 var(--f-ui)} .t-lm{font:500 14px/1 var(--f-ui)} .t-ls{font:500 12px/1 var(--f-ui)} .t-lxs{font:500 10px/1 var(--f-ui)} .t-l2xs{font:500 8px/1 var(--f-ui)}
+.t-link{font:700 12px/1.5 var(--f-ui)}
+.t-p2xl{font:400 20px/1.5 var(--f-ui)} .t-pm{font:400 14px/1.5 var(--f-ui)} .t-ps{font:400 12px/1.5 var(--f-ui)}
