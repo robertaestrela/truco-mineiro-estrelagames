@@ -9,9 +9,9 @@ const ONLINE = {truco: '1.248', cacheta: '864', tranca: '402', buraco: '611', po
 function seedFeed(gid) {
   const gn = gameById(gid).name;
   const base = [
-    {who: 'dutra77', c: 'comandante', g: 'ele', t: gid === 'truco' ? 'alguém pra um truco valendo R$ 5?' : `alguém pra um ${gn.toLowerCase()} valendo R$ 5?`},
+    {who: 'dutra77', c: 'comandante', g: 'ele', t: gid === 'truco' ? 'alguém pra um truco valendo R$ 5?' : `alguém pra ${doG(gameById(gid)) === 'da' ? 'uma' : 'um'} ${gn.toLowerCase()} valendo R$ 5?`},
     {who: 'af_07', c: 'piloto', g: 'ela', t: gid === 'truco' ? 'bora! mas no Mineiro' : 'bora!'},
-    {type: 'oficial', who: 'EstrelaGames', t: `bônus no ar pra galera do ${gn}! Corre que é por ordem de chegada.`, bonus: {v: 5, left: 7, of: 10}},
+    {type: 'oficial', who: 'EstrelaGames', t: `bônus no ar pra galera ${doG(gameById(gid))} ${gn}! Corre que é por ordem de chegada.`, bonus: {v: 5, left: 7, of: 10}},
     {type: 'estrela', who: 'alfonso.dutra', c: 'navegador', g: 'ele', t: gid === 'truco' ? 'ganhei 5 seguidas no Paulista, tô on fire 🔥' : 'ganhei 5 seguidas hoje, tô on fire 🔥'},
     {who: 'luana.m', c: 'explorador', g: 'ela', t: 'quem topa uma partida depois?'},
     {who: 'dutra77', c: 'comandante', g: 'ele', t: 'entra aí na minha mesa 👇', table: {id: gameById(gid).pfx + '104', game: gid, v: 1, seats: '2/4'}},
@@ -38,7 +38,7 @@ SCREENS.chat = {cls: 'chat', render: () => {
   const g = gameById(CHAT.game), feed = feedOf(CHAT.game);
   return `<div class="pg-top">${header()}${ptop('Chat', {live: true, text: `${g.name} · ${ONLINE[g.id]} online`}, 'home')}</div>
     <div class="hscroll gtabs">${GAMES.map(x => gameBlock(x, x.id === g.id, `data-cgame="${x.id}"`)).join('')}</div>
-    <div class="feed" id="feed"><span class="spacer"></span><div class="sys">Chat do ${g.name} · ${ONLINE[g.id]} online</div>${feed.map(msgHTML).join('')}</div>
+    <div class="feed" id="feed"><span class="spacer"></span><div class="sys">Chat ${doG(g)} ${g.name} · ${ONLINE[g.id]} online</div>${feed.map(msgHTML).join('')}</div>
     <div class="composer"><div class="chint"><span>Você está conversando como ${esc(ST.nick)}</span><span id="cCount">0/200</span></div>
       <div class="row"><button class="bicon" data-a="chatSend" aria-label="Enviar bônus ou mesa">${svg('i-plus')}</button>
         <label class="in"><input id="cIn" maxlength="200" placeholder="Diga algo…" autocomplete="off"></label>
@@ -81,7 +81,7 @@ function chatSendSheet(tab) {
        ${btn(`Enviar ${fmt(SEND.v * SEND.n)} em bônus`, 'pri', 'l', 'data-a="sendDo"', 'wide')}`
     : `<div class="nlist">${lobbyTables(gameById(CHAT.game), defVariant(gameById(CHAT.game))).slice(0, 4).map((t, k) => `<button class="nitem" data-a="sendT:${k}" style="${SEND.table === k ? 'box-shadow:inset 0 0 0 1.5px var(--btn-secondary-border),0 0 12px var(--glow-info)' : ''}">${ic(GAME_ICON[t.game])}<span class="tx"><b>Mesa ${t.id} · ${t.fmt}</b><span>${fmt(t.val)} · ${t.players.length}/${t.max} jogadores · ${t.pts}</span></span></button>`).join('')}</div>
        ${btn('Enviar mesa no chat', 'pri', 'l', 'data-a="sendDo"', 'wide')}`;
-  openSheet(`${sheetHead('chat', 'Enviar no chat', `Chat do ${gameById(CHAT.game).name}`)}${tabs([['bonus', 'Bônus'], ['mesas', 'Mesas']], tab, '', 'stab')}${body}`, {cls: 'g16'});
+  openSheet(`${sheetHead('chat', 'Enviar no chat', `Chat ${doG(gameById(CHAT.game))} ${gameById(CHAT.game).name}`)}${tabs([['bonus', 'Bônus'], ['mesas', 'Mesas']], tab, '', 'stab')}${body}`, {cls: 'g16'});
   $$('#sheet [data-stab]').forEach(b => b.onclick = () => chatSendSheet(b.dataset.stab));
 }
 Object.assign(ACT, {
@@ -126,9 +126,10 @@ function openNotifs() {
   closeNotifs();
   const d = document.createElement('div'); d.className = 'ndrop'; d.id = 'ndrop'; d.innerHTML = renderNotifs();
   d.addEventListener('click', e => { if (e.target === d) closeNotifs(); const t = e.target.closest('[data-ntab]'); if (t) { NTAB = t.dataset.ntab; d.innerHTML = renderNotifs(); } });
-  $('#app').appendChild(d);
+  // no desktop o painel cai do sino do header largo, fora da coluna
+  (DK.on ? document.body : $('#app')).appendChild(d);
 }
-const repaintNotifs = () => { const d = $('#ndrop'); if (d) d.innerHTML = renderNotifs(); ST.unread = NOTIFS.filter(n => n.unread).length; const b = $('.hbell i'); if (b) b.hidden = !ST.unread; };
+const repaintNotifs = () => { const d = $('#ndrop'); if (d) d.innerHTML = renderNotifs(); ST.unread = NOTIFS.filter(n => n.unread).length; $$('.hbell i').forEach(b => { b.hidden = !ST.unread; }); };
 Object.assign(ACT, {
   notifs: () => { if ($('#ndrop')) closeNotifs(); else openNotifs(); },
   nAll: () => { NOTIFS.forEach(n => n.unread = false); repaintNotifs(); },
@@ -311,7 +312,7 @@ SCREENS.ranking = {cls: 'rk', render: () => `<div class="pg-top">${header()}${pt
 click: e => { const t = e.target.closest('[data-rkg],[data-rkf]'); if (!t) return; if (t.dataset.rkg) RK.geral = t.dataset.rkg; else RK.gfilter = t.dataset.rkf; rerender(); }};
 SCREENS.rankGame = {cls: 'rk', render: ({game: gid}) => {
   const g = gameById(gid), v = RK.variant && g.variants.includes(RK.variant) ? RK.variant : ST.variant, st = tabStyle(g, v);
-  return `<div class="pg-top">${header()}${ptop(`Ranking do ${g.name}`, 'Fecha em 2d 14h · ranking da semana')}</div>
+  return `<div class="pg-top">${header()}${ptop(`Ranking ${doG(g)} ${g.name}`, 'Fecha em 2d 14h · ranking da semana')}</div>
   <div class="scroll"><div class="content">${g.variants.length > 1 ? tabs(g.variants, v, st, 'rkv') : ''}${tabs([['semana', 'Semana'], ['mes', 'Mês'], ['geral', 'Geral']], RK.period, st, 'rkp')}
     ${podiumHTML(st === 'azul' ? 'var(--game-paulista)' : g.color)}
     <div class="rlist">${RANK_ROWS.map((r, k) => rowHTML(r, k + 4, g.name)).join('')}</div></div></div>${meRow(g.name)}`;

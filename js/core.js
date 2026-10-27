@@ -45,6 +45,8 @@ const GAMES = [
   {id: 'sinuca', name: 'Sinuca', color: 'var(--game-sinuca)', tabs: 'verde', variants: ['Bola 8', 'Brasileira'], soonV: ['Brasileira'], def: 'Bola 8', pfx: 'S', pts: () => 'Bola 8 · 1x1'}
 ];
 const gameById = id => GAMES.find(g => g.id === id);
+// artigo do nome do jogo: "Chat da Cacheta", "Ranking do Truco"
+const doG = g => ['cacheta', 'tranca', 'sinuca'].includes(g.id) ? 'da' : 'do';
 const game = () => gameById(ST.game);
 const tabStyle = (g, v) => typeof g.tabs === 'function' ? g.tabs(v) : g.tabs;
 const defVariant = g => g.def;

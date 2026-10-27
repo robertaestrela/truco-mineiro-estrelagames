@@ -17,6 +17,8 @@ Protótipo mobile do **EstrelaGames** (redesign *Apple Gamer Style*), fiel ao Fi
 
 Também navegáveis com dados de exemplo: Chat (bônus e mesas no chat), Notificações, Perfil, Histórico, Ranking (geral e por jogo), Ajustes, Limites e Carteira (Pix).
 
+**Desktop** (só no computador, com mouse ou trackpad e janela de 1024 px ou mais na horizontal; celular e tablet continuam no layout mobile, mesmo deitados): as telas e os jogos ficam numa coluna 9:16 no meio. Em volta, um header largo (marca, saldo e bônus, sino, perfil), o menu à esquerda (os itens da navbar mais Perfil, Carteira, Histórico, Ranking e Ajustes) e o chat ao vivo do jogo à direita, que vira o Chat da mesa durante a partida. Em partida, o menu e o header ficam travados (sai-se pelo Voltar do jogo). Entre 1024 e 1279 px o menu vira trilho e o chat volta a ser a aba Chat.
+
 ## Rodar
 
 É um site estático. Abra `index.html` por um servidor local (vídeos e fontes precisam de http):
@@ -27,7 +29,7 @@ python3 -m http.server 8000
 
 e acesse http://localhost:8000. No celular, use o link do GitHub Pages.
 
-Atalhos de teste na URL: `?home` pula o cadastro · `&skin=gamer_ela` já entra com um personagem · `&go=loja` abre uma tela · `&game=sinuca` escolhe o jogo do lobby · `&play=truco:Mineiro:2x2` abre uma partida.
+Atalhos de teste na URL: `?home` pula o cadastro · `&skin=gamer_ela` já entra com um personagem · `&go=loja` abre uma tela · `&game=sinuca` escolhe o jogo do lobby · `&play=truco:Mineiro:2x2` abre uma partida · `&desk=1` / `&desk=0` forçam ou desligam o layout desktop.
 
 A Sinuca usa Three.js (carregado do jsDelivr), então precisa de internet.
 
@@ -39,6 +41,7 @@ css/tokens.css    tokens do DS EstrelaGames (cores, tipografia) resolvidos 1:1
 css/ui.css        componentes (header-game, navbar-glass, game-block, tabs, button-glass, stake-pill, table-glass…)
 css/screens.css   telas (cadastro, lobby, Home com skin, Loja, Batalhas, Chat, Perfil, Ranking, Carteira…)
 css/game.css      tela de jogo (match-top, match-nav, cartas, chamada de truco, resultado)
+css/desk.css      desktop: header largo, menu, chat ao vivo e a coluna 9:16
 js/core.js        dados e estado
 js/ui.js          componentes em HTML
 js/screens.js     navegação, cadastro, lobby, Home, fila e resultado
@@ -47,6 +50,7 @@ js/social.js      Chat, Notificações, Perfil, Ajustes, Carteira e Ranking
 js/battles.js     Batalhas e série de partidas
 js/games.js       motores dos jogos e bots
 js/sinuca.js      abre a Sinuca (mesa 3D) e recebe o resultado dela
+js/desk.js        desktop: liga o layout largo e pinta header, menu e chat ao vivo
 sinuca/           Sinuca Bola 8: mesa 3D, física e bot (página própria, aberta num iframe)
 assets/           ícones 3D, fotos e vídeos dos personagens, mesas, artes da Loja
 ```

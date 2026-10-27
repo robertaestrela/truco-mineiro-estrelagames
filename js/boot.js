@@ -2,7 +2,9 @@
 'use strict';
 function fit() {
   const ph = $('#phone');
-  if (window.innerWidth > 520) { const s = Math.min(1, (window.innerHeight - 40) / 812, (window.innerWidth - 40) / 375); ph.style.transform = `scale(${s})`; } else ph.style.transform = '';
+  dkApply();
+  if (DK.on) dkFit();
+  else if (window.innerWidth > 520) { const s = Math.min(1, (window.innerHeight - 40) / 812, (window.innerWidth - 40) / 375); ph.style.transform = `scale(${s})`; } else ph.style.transform = '';
   fitBoard();
 }
 window.addEventListener('resize', fit);

@@ -19,6 +19,7 @@ function go(name, p = {}, opts = {}) {
   // fileiras horizontais (jogos, apostas) não voltam ao início quando a tela se redesenha; o jogo escolhido fica à vista
   $$('#view .hscroll').forEach((x, i) => { if (keepX[i]) x.scrollLeft = keepX[i]; const on = x.querySelector('.gb.on'); if (on && (on.offsetLeft < x.scrollLeft || on.offsetLeft + on.offsetWidth > x.scrollLeft + x.clientWidth)) x.scrollLeft = on.offsetLeft - (x.clientWidth - on.offsetWidth) / 2; });
   playViewVideos();
+  paintDesk();
 }
 const rerender = () => go(CUR, CURP, {noHist: true, keepScroll: true});
 function back() { const h = HIST.pop(); if (h) go(h[0], h[1], {noHist: true}); else goHome(); }
@@ -28,7 +29,7 @@ function playViewVideos() { $$('#view video').forEach(vd => { vd.muted = true; v
 function pauseViewVideos() { $$('#view video').forEach(vd => vd.pause()); }
 // usado pelos motores de jogo
 function show(id) { if (id === 'game') { closeSheet(); closeNotifs(); pauseViewVideos(); $('#view').hidden = true; $('#scr-game').hidden = false; requestAnimationFrame(() => typeof fitBoard === 'function' && fitBoard()); } }
-function refreshChrome() { const h = $('#view .hdr'); if (h) h.outerHTML = header(); }
+function refreshChrome() { const h = $('#view .hdr'); if (h) h.outerHTML = header(); paintDesk(); }
 
 document.addEventListener('click', e => {
   const a = e.target.closest('[data-a]');
@@ -168,7 +169,7 @@ SCREENS.lobby = {cls: 'lobby', render: () => {
   const rows = []; for (let i = 0; i < tbl.length; i += 2) rows.push(`<div class="tg-row">${tableCard(tbl[i])}${tbl[i + 1] ? tableCard(tbl[i + 1]) : ''}</div>`);
   return `${header()}<div class="scroll"><div class="content">
     <div class="hscroll games-row">${GAMES.map(x => gameBlock(x, x.id === g.id, `data-game="${x.id}"`)).join('')}</div>
-    ${g.soon ? '' : `<div class="modos">${tabs(g.variants, ST.variant, tabStyle(g, ST.variant), 'var')}<button class="bicon" data-a="rankGame" aria-label="Ranking do ${g.name}">${ic('trophy')}</button></div>`}
+    ${g.soon ? '' : `<div class="modos">${tabs(g.variants, ST.variant, tabStyle(g, ST.variant), 'var')}<button class="bicon" data-a="rankGame" aria-label="Ranking ${doG(g)} ${g.name}">${ic('trophy')}</button></div>`}
     ${g.id === 'truco' ? tabs(['1x1', '2x2'], ST.trucoMode, '', 'tmode', 'aria-label="Formato"') : ''}
     <section class="sec"><div class="trow"><b>Partida rápida · ${fmtLabel()}</b><small>Taxa da mesa 10%</small></div>
       <div class="stakes" id="stakes"><div class="track">${stakeCarousel()}</div></div>
@@ -226,6 +227,7 @@ function paintHomeGames() {
   const gl = $('#view .stage .gl'); if (!gl) return;
   $$('.gb', gl).forEach(b => { const on = b.dataset.hgame === ST.game; b.classList.toggle('on', on); });
   const cta = $('#view [data-a="homePlay"]'); if (cta) cta.textContent = `Jogar ${game().name}`;
+  paintDesk();
 }
 const HOME_VT = {src: '', t: 0};
 Object.assign(ACT, {

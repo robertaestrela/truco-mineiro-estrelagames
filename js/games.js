@@ -1318,7 +1318,7 @@ $('#mnav').addEventListener('click', e => {
   const b = e.target.closest('[data-g]'); if (!b) return;
   const k = b.dataset.g;
   if (k === 'voltar') leaveSheet();
-  else if (k === 'chat') gameChatSheet();
+  else if (k === 'chat') { if (!(DK.on && DK.chat && dkFocusChat())) gameChatSheet(); }
   else if (k === 'mesa') tableSheet();
   else if (k === 'voz') { ST.mic = !ST.mic; $('#micIco').src = I(ST.mic ? 'microphone' : 'microphone-off'); b.querySelector('span').textContent = ST.mic ? 'Voz ligada' : 'Voz'; gtoast(ST.mic ? `${(activeGame() || {players: [[OPP.n]]}).players.slice(-1)[0][0]} falando · ${(activeGame() || {players: []}).players.length} na voz` : 'Voz desligada'); }
   else if (k === 'ajustes') personalizar();
