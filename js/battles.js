@@ -15,11 +15,11 @@ const BATTLES = [
 const GT = {truco: 'var(--game-truco-tint)', cacheta: 'var(--game-cacheta-tint)', buraco: 'var(--game-buraco-tint)', tranca: '#2cc1603d', poker: '#0fa9683d', sinuca: '#2fa35a3d'};
 function battleCard(b) {
   const live = b.state === 'Em jogo', max = seatsOf(b.fmt);
-  return `<button class="bcard ${live ? 'live' : ''}" data-bat="${b.id}">
+  return `<div role="button" tabindex="0" class="bcard ${live ? 'live' : ''}" data-bat="${b.id}">
     <span class="gm" style="--gt:${GT[b.game]}">${ic(GAME_ICON[b.game])}</span>
     <span class="info"><span class="t"><b>${esc(b.name)}</b>${b.locked ? ic('lock') : ''}</span>
       <span class="meta"><span class="pl"><i></i><span class="avs">${b.players.slice(0, 3).map(p => `<span style="--cc:${crewColor(p[1], p[2])}"><img src="${photo(p[1], p[2])}" alt=""></span>`).join('')}</span><em>${b.players.length}/${max}</em></span><small>${fmtTxt(b)}</small></span></span>
-    <span class="vals"><b>Prêmio ${fmt(battlePrize(b))}</b><span>Entrada<em>${fmt(b.buyin)}</em></span></span></button>`;
+    <span class="vals"><b>Prêmio ${fmt(battlePrize(b))}</b><span>Entrada<em>${fmt(b.buyin)}</em></span></span></div>`;
 }
 const BL = {filter: 'todos', q: ''};
 SCREENS.batalhas = {cls: 'bat', render: () => {
@@ -85,7 +85,7 @@ SCREENS.cbattle = {cls: 'cflow', render: () => {
   if (s === 4) {
     const n = seatsOf(CB.fmt);
     body = `<h2>Quanto vale a entrada?</h2><span class="lbl">Buy-in por jogador</span>
-      <div class="stake-grid">${BUYINS.map(v => stakePill({v, q: 0}, 'M', CB.buyin === v, `data-cbb="${v}"`).replace('<span class="v">', `<span class="v" data-x>`)).join('')}</div>
+      <div class="stake-grid">${BUYINS.map(v => stakePill({v, q: 0}, 'M', CB.buyin === v, `data-cbb="${v}"`, {money: true, prize: +(v * n * .9).toFixed(2)})).join('')}</div>
       <p class="help">Com ${n} jogadores a ${fmt(CB.buyin)}, o prêmio é ${fmt(+(CB.buyin * n * .9).toFixed(2))} · taxa da casa 10%.</p>`;
   }
   if (s === 5) {

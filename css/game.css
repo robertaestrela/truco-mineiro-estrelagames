@@ -95,7 +95,7 @@
 .pkranks{display:flex;flex-direction:column;gap:2px;width:100%;max-width:343px;margin-top:-8px}
 .pkrank{display:flex;align-items:center;gap:10px;padding:6px 12px;border-radius:12px;background:var(--bga-strong-50);font:500 12px/1 var(--f-ui)}
 .pkrank b{width:22px;font:700 14px/1 var(--f-display)} .pkrank span{flex:1;text-align:left} .pkrank i{font-style:normal;color:var(--text-prize);font-weight:700}
-.pkrank.me{box-shadow:inset 0 0 0 1px var(--btn-primary-top);background:color-mix(in srgb,var(--sys-info) 18%,transparent)}
+.pkrank.me{box-shadow:inset 0 0 0 1px var(--btn-primary-top);background:#3b74f52e}
 @media (max-height:700px){.res2{padding-top:32px}.rblock{gap:16px}.rblock .big{width:96px;height:96px}.rt h1{font-size:40px}}
 
 /* ---------- customize-sheet (Personalizar) ---------- */

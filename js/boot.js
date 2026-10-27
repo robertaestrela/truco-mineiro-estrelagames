@@ -12,6 +12,7 @@ if (QS.has('home') || QS.has('go')) {
   ST.onboarded = true;
   const sk = QS.get('skin'); if (sk) { const [c, g] = sk.split('_'); ST.crew = c; ST.g = g; ST.owned[packOf(c)] = true; }
   if (QS.has('own')) PACK_ORDER.forEach(p => { ST.owned[p] = true; });
+  if (QS.get('step')) { CB.step = +QS.get('step'); cbFormatFix(); }
   const scr = QS.get('go'); go(scr && SCREENS[scr] ? scr : hasSkin() ? 'jogos' : 'lobby', scr === 'pacote' ? {id: QS.get('id') || 'nobru'} : scr === 'rankGame' ? {game: QS.get('id') || 'truco'} : {}, {noHist: true, reset: true});
   const pl = QS.get('play'); if (pl) { const [g, v, m] = pl.split(':'); Object.assign(ST, {game: g, variant: v || defVariant(gameById(g))}); if (m) ST.trucoMode = m; launchGame(game().pfx + '104'); }
   const act = QS.get('act'); if (act) { const [k, ...r] = act.split(':'); setTimeout(() => ACT[k] && ACT[k](r.join(':')), 50); }

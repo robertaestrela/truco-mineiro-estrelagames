@@ -15,8 +15,8 @@ function packCardS(id) {
   const p = PACKS[id], act = packActive(id), own = ST.owned[id];
   // Magia do bar e Reis do baralho mostram o Rei e a Rainha lado a lado (como no Figma)
   const bg = p.duo ? `background-image:url(${A}art/${p.artS}.webp),url(${A}art/${p.artL}.webp);background-size:50% auto,50% auto;background-position:left 12%,right 12%;background-repeat:no-repeat` : `background-image:url(${A}art/${p.artS}.webp);background-position:${p.posS}`;
-  return `<button class="spk S" data-pack="${id}"><span class="art" style="${bg}">${act ? tag('Ativo', 'success') : own ? tag('Seu', 'success') : tag('Novo', 'danger')}${own ? '' : `<span class="price">${fmt2(PRICE)}</span>`}</span>
-    <span class="tx"><b>${p.name}</b><small>${p.skins} skins</small></span></button>`;
+  return `<div role="button" tabindex="0" class="spk S" data-pack="${id}"><span class="art" style="${bg}">${act ? tag('Ativo', 'success') : own ? tag('Seu', 'success') : tag('Novo', 'danger')}${own ? '' : `<span class="price">${fmt2(PRICE)}</span>`}</span>
+    <span class="tx"><b>${p.name}</b><small>${p.skins} skins</small></span></div>`;
 }
 const soonCard = (n, k) => `<div class="spk S blocked t${k}" aria-label="${n} · em breve"><span class="art">${tag('Em breve')}${ic('lock', 'lock')}</span><span class="tx"><b>Em breve</b><small>Novos personagens</small></span></div>`;
 const LOJA_CATS = [['skins', 'user', 'Skins'], ['baralhos', 'truco', 'Baralhos'], ['molduras', 'crown', 'Molduras'], ['efeitos', 'fire', 'Efeitos'], ['ofertas', 'gift', 'Ofertas']];
@@ -25,7 +25,7 @@ SCREENS.loja = {cls: 'loja', render: () => {
   let body;
   if (LOJA.cat === 'baralhos') {
     body = `<div class="packs">${stitle('Baralhos', 'Ative o verso que quiser · vale em todos os jogos')}
-      <div class="decks">${DECKS.map(([k, l]) => `<button class="deckc ${ST.deck === k ? 'on' : ''}" data-deck="${k}"><span class="dk">${deckBack(k, 'L')}</span><b>${l}</b>${ST.deck === k ? tag('Ativo', 'success') : tag('Seu', 'neutral')}</button>`).join('')}</div></div>`;
+      <div class="decks">${DECKS.map(([k, l]) => `<div role="button" tabindex="0" class="deckc ${ST.deck === k ? 'on' : ''}" data-deck="${k}"><span class="dk">${deckBack(k, 'L')}</span><b>${l}</b>${ST.deck === k ? tag('Ativo', 'success') : tag('Seu', 'neutral')}</div>`).join('')}</div></div>`;
   } else {
     // ordem: Nobru & Inhui em destaque · Magia do bar · Reis do baralho · Estelar
     body = `${packCardL('nobru')}
@@ -55,8 +55,8 @@ SCREENS.pacote = {cls: 'pack', render: ({id}) => {
     ${packCardL(id, 'page')}
     <div class="pk-box">${stitle('Personagens incluídos', p.incl)}${includedHTML(id)}</div>
     <div class="pk-box unl">${stitle('Como desbloquear', 'Escolha um dos caminhos')}
-      <button class="uopt" data-a="buyPack:${id}">${ic('banknote')}<span class="tx"><b>Comprar agora</b><small>Libera na hora, direto do seu saldo</small></span><span class="pr">${fmt2(PRICE)}</span></button>
-      <button class="uopt" data-a="earnPack:${id}">${ic('trophy')}<span class="tx"><b>Ganhar jogando</b><small>Vença 20 partidas em qualquer jogo</small></span><span class="pg"><b>${won}/20</b><span class="tr"><i style="width:${won / 20 * 100}%"></i></span></span></button>
+      <div role="button" tabindex="0" class="uopt" data-a="buyPack:${id}">${ic('banknote')}<span class="tx"><b>Comprar agora</b><small>Libera na hora, direto do seu saldo</small></span><span class="pr">${fmt2(PRICE)}</span></div>
+      <div role="button" tabindex="0" class="uopt" data-a="earnPack:${id}">${ic('trophy')}<span class="tx"><b>Ganhar jogando</b><small>Vença 20 partidas em qualquer jogo</small></span><span class="pg"><b>${won}/20</b><span class="tr"><i style="width:${won / 20 * 100}%"></i></span></span></div>
     </div></div></div>${navbar('loja')}`;
 }};
 function buyPack(id) {

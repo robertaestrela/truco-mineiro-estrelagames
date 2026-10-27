@@ -2,6 +2,7 @@
 'use strict';
 const ic = (n, cls = '', alt = '') => `<img class="ic ${cls}" src="${I(n)}" alt="${alt}">`;
 const svg = (id, cls = '') => `<svg class="${cls}" aria-hidden="true"><use href="#${id}"/></svg>`;
+const GAME_HEX = {cacheta: '#8752f2', truco: '#e5484d', tranca: '#2cc160', buraco: '#1f9a4a', poker: '#0fa968', sinuca: '#2fa35a', todos: '#3b74f5'};
 const GAME_ICON = {cacheta: 'cacheta', truco: 'truco', tranca: 'tranca', buraco: 'buraco', poker: 'poker', sinuca: 'sinuca', todos: 'all'};
 
 // header-avatar · hexágono com a cor da tripulação. Aceita tamanho em px (compatível com os motores) ou xs/s/m/l
@@ -40,7 +41,7 @@ function navbar(active) {
 function gameBlock(g, on, attr = '', label) {
   const gid = typeof g === 'string' ? g : g.id, G = gameById(gid);
   const color = gid === 'todos' ? 'var(--game-todos)' : G.color;
-  return `<button class="gb ${on ? 'on' : ''}" style="--gc:${color}" ${attr}>${ic(GAME_ICON[gid])}${label || (G ? G.name : 'Todos')}${G && G.soon ? `<img class="lk" src="${I('lock')}" alt="Em breve">` : ''}</button>`;
+  return `<div role="button" tabindex="0" class="gb ${on ? 'on' : ''}" style="--gc:${color};--gs:${GAME_HEX[gid]}3d" ${attr}>${ic(GAME_ICON[gid])}${label || (G ? G.name : 'Todos')}${G && G.soon ? `<img class="lk" src="${I('lock')}" alt="Em breve">` : ''}</div>`;
 }
 
 function tabs(items, sel, style = '', attr = 'tab', extra = '') {
@@ -58,21 +59,21 @@ function ptop(title, sub, back = 'back', action = '') {
 }
 
 // stake-pill · tamanhos S 68 / M 88 / L 112
-function stakePill(s, size, on, attr = '') {
-  const pr = fmt(prizeOf(s.v));
-  return `<button class="sp ${size} ${s.tag ? 'ini' : ''} ${on ? 'on' : ''}" ${attr}>
-    <span class="st"><span class="v">${ic('coins')}${s.v.toLocaleString('pt-BR')}</span>${s.tag ? `<span class="tg">${s.tag}</span>` : ''}${s.q && size !== 'S' ? `<span class="q">${s.q}</span>` : ''}</span>
-    ${size !== 'S' ? `<span class="ft"><small>Prêmio</small><b>${pr}</b></span>` : ''}</button>`;
+function stakePill(s, size, on, attr = '', opts = {}) {
+  const pr = opts.prize != null ? fmt(opts.prize) : fmt(prizeOf(s.v));
+  return `<div role="button" tabindex="0" class="sp ${size} ${s.tag ? 'ini' : ''} ${on ? 'on' : ''}" ${attr}>
+    <span class="st"><span class="v">${ic('coins')}${opts.money ? fmt(s.v) : s.v.toLocaleString('pt-BR')}</span>${s.tag ? `<span class="tg">${s.tag}</span>` : ''}${s.q && size !== 'S' ? `<span class="q">${s.q}</span>` : ''}</span>
+    ${size !== 'S' ? `<span class="ft"><small>Prêmio</small><b>${pr}</b></span>` : ''}</div>`;
 }
 
 // table-glass · mesa aberta (Cartas · cápsula / Sinuca · retângulo)
 function tableCard(t) {
   const pool = t.game === 'sinuca';
   const seats = t.players.map(p => `<span style="--cc:${crewColor(p[1], p[2])}"><img src="${photo(p[1], p[2])}" alt=""></span>`).join('');
-  return `<button class="tgl ${pool ? 'pool' : ''} ${t.locked ? 'locked' : ''}" data-table="${t.id}">
+  return `<div role="button" tabindex="0" class="tgl ${pool ? 'pool' : ''} ${t.locked ? 'locked' : ''}" data-table="${t.id}">
     <span class="felt">${pool ? '<i class="pk" style="left:4px;top:4px"></i><i class="pk" style="left:calc(50% - 5px);top:2px"></i><i class="pk" style="right:4px;top:4px"></i><i class="pk" style="left:4px;bottom:4px"></i><i class="pk" style="left:calc(50% - 5px);bottom:2px"></i><i class="pk" style="right:4px;bottom:4px"></i>' : ''}
       <span class="vals"><b>${fmt(t.val)}</b><small>${t.pts}</small><span class="seats"><span class="pl">${seats}</span><em>${t.players.length}/${t.max}</em></span></span></span>
-    <span class="tab">${t.id} · ${t.fmt}</span>${ic(GAME_ICON[t.game], 'deck')}</button>`;
+    <span class="tab">${t.id} · ${t.fmt}</span>${ic(GAME_ICON[t.game], 'deck')}</div>`;
 }
 
 /* ---------- bottom sheet ---------- */

@@ -1342,7 +1342,7 @@ function refreshBacks() { document.querySelectorAll('.card.back').forEach(el => 
 /* ---------- customize-sheet · Personalizar (avatar · mesa · baralho) · muda na hora ---------- */
 const MESAS = [['azul', 'Azul', null], ['vermelha', 'Vermelha', null], ['bar', 'Bar', null], ['reis', 'Reis do baralho', 'reis'], ['gamer', 'Nobru & Inhui', 'nobru']];
 function personalizar() {
-  const tile = (on, locked, inner, label, data) => `<button class="ctile ${on ? 'on' : ''} ${locked ? 'locked' : ''}" ${data}><span class="mini">${inner}${locked ? tag('Loja') : ''}</span><span class="lb">${label}</span></button>`;
+  const tile = (on, locked, inner, label, data) => `<div role="button" tabindex="0" class="ctile ${on ? 'on' : ''} ${locked ? 'locked' : ''}" ${data}><span class="mini">${inner}${locked ? tag('Loja') : ''}</span><span class="lb">${label}</span></div>`;
   const avs = [['nenhum', 'ela', null]];
   PACK_ORDER.forEach(pk => { const p = PACKS[pk]; const list = pk === 'estelar' ? p.roles.map(r => [r, hasSkin() && packOf(ST.crew) === 'estelar' ? ST.g : 'ela']) : [[p.roles[0], 'ele'], [p.roles[0], 'ela']]; list.forEach(([c, g]) => avs.push([c, g, ST.owned[pk] ? null : pk])); });
   avs.sort((a, b) => (a[2] ? 1 : 0) - (b[2] ? 1 : 0));

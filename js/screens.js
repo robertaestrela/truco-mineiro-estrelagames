@@ -37,6 +37,8 @@ document.addEventListener('click', e => {
   if (S && S.click && !$('#view').hidden && $('#view').contains(e.target)) S.click(e);
 });
 
+// teclado nos cards clicáveis (div[role=button]): Enter e Espaço clicam
+document.addEventListener('keydown', e => { const t = e.target; if ((e.key === 'Enter' || e.key === ' ') && t.getAttribute && t.getAttribute('role') === 'button') { e.preventDefault(); t.click(); } });
 Object.assign(ACT, {
   home: () => goHome(),
   back: () => back(),
@@ -264,7 +266,7 @@ async function startQueue(tableId, opts = {}) {
   const people = opts.people || queuePeople(), g = game();
   openSheet(`${sheetHead(GAME_ICON[g.id], '<span id="qTitle">Buscando jogadores…</span>', training ? `Treino contra bots · ${matchLabel()}` : `${matchLabel()} · ${fmt(ST.stake)} · mesa ${tableId}`, false)}
     <button class="xbtn" data-a="queueCancel" aria-label="Cancelar" style="position:absolute;right:12px;top:20px">${svg('i-x')}</button>
-    <div class="qslots" id="qSlots" style="grid-template-columns:repeat(${Math.min(people.length, 4)},1fr)">${people.map((p, i) => `<div class="qslot ${i === 0 ? 'filled' : ''}" data-i="${i}">${i === 0 ? hex(p[1], p[2], 'm', 0, true, {add: false}) + `<b>${esc(p[0])}</b>` : '<span class="spin"></span>vaga'}</div>`).join('')}</div>
+    <div class="qslots" id="qSlots" style="grid-template-columns:repeat(${Math.min(people.length, 4)},minmax(0,1fr))">${people.map((p, i) => `<div class="qslot ${i === 0 ? 'filled' : ''}" data-i="${i}">${i === 0 ? hex(p[1], p[2], 'm', 0, true, {add: false}) + `<b>${esc(p[0])}</b>` : '<span class="spin"></span>vaga'}</div>`).join('')}</div>
     <div class="qcount" id="qCount" hidden>3</div>
     <p class="qinfo">${opts.info || queueRules()}</p>`, {dismiss: false, cls: 'g16'});
   for (let i = 1; i < people.length; i++) { await wait(rnd(450, 850)); if (queueAbort) return; const s = $(`#qSlots [data-i="${i}"]`); if (!s) return; s.classList.add('filled'); s.innerHTML = hex(people[i][1], people[i][2], 'm', 0, true) + `<b>${esc(people[i][0])}</b>`; }
