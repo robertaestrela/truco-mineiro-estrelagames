@@ -130,14 +130,18 @@ async function callRaise(p) {
   if (respTeam === 1) { await wait(rnd(900, 1500)); botRespond(1); }
   else if (G.players[0].team !== respTeam) { /* never */ }
 }
-function respond(team, action) {
+async function respond(team, action) {
   if (!G || !G.pending) return;
   const pend = G.pending;
   const responder = team === 0 ? 0 : bestOf(1);
   if (action === 'run') {
     bubble(responder, 'Corri', 'no');
-    hideCall(); G.pending = null;
-    endHand(pend.team, LAD()[G.vi], G.one ? `${team === 0 ? 'Você correu' : `${OPP.n} correu`} · ${team === 0 ? `${OPP.n}` : 'Você'} +${LAD()[G.vi]}` : `${team === 0 ? 'Vocês correram' : 'Eles correram'} · ${team === 0 ? 'Eles' : 'Nós'} +${LAD()[G.vi]}`);
+    G.pending = null;
+    const pts = LAD()[G.vi];
+    await showAnswer('run', team, pts, responder);
+    if (!G) return;
+    hideCall();
+    endHand(pend.team, pts, G.one ? `${team === 0 ? 'Você correu' : `${OPP.n} correu`} · ${team === 0 ? `${OPP.n}` : 'Você'} +${pts}` : `${team === 0 ? 'Vocês correram' : 'Eles correram'} · ${team === 0 ? 'Eles' : 'Nós'} +${pts}`);
     return;
   }
   G.vi = pend.idx;
@@ -147,10 +151,12 @@ function respond(team, action) {
     return;
   }
   bubble(responder, 'Aceito!', 'ok');
-  G.pending = null; hideCall();
-  toast(`${team === 0 ? (G.one ? 'Você aceitou' : 'Vocês aceitaram') : (G.one ? `${OPP.n} aceitou` : 'Eles aceitaram')} · a mão vale ${LAD()[G.vi]}`);
+  G.pending = null;
+  await showAnswer('acc', team, LAD()[G.vi], responder);
+  if (!G) return;
+  hideCall();
   renderHUD(); updateActs();
-  setTimeout(nextTurn, 500);
+  setTimeout(nextTurn, 300);
 }
 function bestOf(team) { let best = -1, who = [0, 1, 2, 3].find(p => G.players[p] && G.players[p].team === team); for (const p of [0, 1, 2, 3]) if (G.players[p] && G.players[p].team === team && G.players[p].bot) { const s = strength(p); if (s > best) { best = s; who = p; } } return who; }
 function strength(p) { const pw = G.hands[p].map(power).sort((a, b) => b - a); const top2 = (pw[0] || 0) + (pw[1] || 0); const won = G.results.filter(r => r === G.players[p].team).length, lost = G.results.filter(r => r === 1 - G.players[p].team).length; return top2 + won * 4 - lost * 4; }
@@ -395,6 +401,33 @@ function showCall(p, idx, youRespond) {
   });
 }
 function hideCall() { const c = $('#call'); if (c) { c.style.transition = 'opacity .25s'; c.style.opacity = '0'; setTimeout(() => { if ($('#call') === c) $('#overlay').innerHTML = ''; }, 260); } }
+// resposta ao truco: o mesmo overlay do pedido continua e muda de clima
+// aceitou → o fogo cresce e solta mais brasa · correu → o fogo apaga, sobe fumaça e a palavra cai ("deu ruim")
+function showAnswer(kind, team, pts, rp) {
+  return new Promise(res => {
+    const acc = kind === 'acc', one = G.one;
+    const word = acc ? (one ? 'aceitou' : 'aceitaram') : (one ? 'correu' : 'correram');
+    const who = team === 0 ? (one ? (acc ? 'Você aceitou' : 'Você correu') : (acc ? 'Vocês aceitaram' : 'Vocês correram')) : (one ? `${OPP.n} ${acc ? 'aceitou' : 'correu'}` : (acc ? 'Eles aceitaram' : 'Eles correram'));
+    const tail = acc ? `a mão vale ${pts}` : (team === 0 ? (one ? `${OPP.n} leva +${pts}` : `Eles levam +${pts}`) : (one ? `Você leva +${pts}` : `Nós levamos +${pts}`));
+    let c = $('#call');
+    if (!c) {
+      $('#overlay').innerHTML = `<div class="call" id="call"><div class="veil2"></div><div class="fire fireA"></div><div class="fire fireB"></div><div class="glow"></div><div class="content"></div></div>`;
+      c = $('#call');
+    }
+    c.querySelectorAll('.resp,.wait').forEach(n => n.remove());
+    // o círculo passa a mostrar quem respondeu
+    const R = G.players[rp];
+    if (R) { let w = c.querySelector('.who'); if (!w) { c.querySelector('.content').insertAdjacentHTML('beforebegin', '<div class="who"></div>'); w = c.querySelector('.who'); }
+      w.innerHTML = R.crew === 'nenhum' ? `<img class="empty" src="${A}ui/avatar_empty.webp" alt="">` : `<video src="${A}video/call/${R.crew}_${R.g}.mp4" autoplay muted loop playsinline preload="auto" poster="${photo(R.crew, R.g)}"></video>`; }
+    const embers = acc ? Array.from({length: 22}, (_, k) => `<i class="ember hot" style="left:${3 + k * 4.4}%;--dx:${(k % 2 ? 1 : -1) * (14 + (k % 4) * 14)}px;animation-delay:${(k * .05).toFixed(2)}s"></i>`).join('')
+      : `<div class="smoke">${Array.from({length: 14}, (_, k) => `<i style="left:${4 + k * 7}%;bottom:${-80 + (k % 4) * 60}px;--dx:${(k % 2 ? 1 : -1) * (16 + (k % 3) * 22)}px;--s:${(1.3 + (k % 3) * .4).toFixed(2)};animation-delay:${(.1 + (k % 6) * .1).toFixed(2)}s"></i>`).join('')}</div>`;
+    c.insertAdjacentHTML('beforeend', embers);
+    const ct = c.querySelector('.content');
+    ct.innerHTML = `<span class="pill">${who}</span><img class="word ans" src="${A}ui/word_${word}.webp" alt="${word.toUpperCase()}"><span class="pill vale">${tail}</span>`;
+    c.classList.add(acc ? 'acc' : 'run');
+    setTimeout(res, acc ? 1700 : 2300);
+  });
+}
 
 /* ---------- PIF-PAF ENGINE (Cacheta · 1x1 contra bot) ---------- */
 // 2 baralhos de 52 (104 cartas), 9 cartas cada. Na vez: compra (monte ou lixo) e descarta 1.
