@@ -79,6 +79,7 @@ function buyinError(v) { if (!v || v < BUYIN_MIN) return `Mínimo ${fmt(BUYIN_MI
 function paintBuyin() {
   const v = CB.buyin, n = seatsOf(CB.fmt), pot = +(v * n * .9).toFixed(2), err = buyinError(v);
   const box = $('#cbBox'); if (!box) return;
+  $('#cbFit').dataset.v = $('#cbVal').value || '0,00'; // o campo cresce com o número: o R$ e o lápis ficam colados no valor
   box.classList.toggle('err', !!err);
   $('#cbAfter').textContent = err || `Saldo depois de criar: ${fmt2(+(ST.saldo - v).toFixed(2))}`;
   $('#cbPrize').textContent = err ? '' : `Prêmio ${fmt2(pot)}`; $('#cbPrize').hidden = !!err;
@@ -103,7 +104,7 @@ SCREENS.cbattle = {cls: 'cflow', render: () => {
   if (s === 4) {
     // valor livre primeiro (a pessoa digita) e, embaixo, os valores das mesas como atalho
     body = `<h2>Quanto vale a entrada?</h2><span class="lbl">Buy-in por jogador · de ${fmt(BUYIN_MIN)} a ${fmt(BUYIN_MAX)}</span>
-      <div class="bival" id="cbBox"><label class="amt-in"><span class="cur">R$</span><input id="cbVal" inputmode="decimal" autocomplete="off" value="${money2(CB.buyin)}" aria-label="Valor da entrada"><button class="edit" data-a="cbEdit" aria-label="Editar valor">${svg('i-pen')}</button></label>
+      <div class="bival" id="cbBox"><label class="amt-in"><span class="cur">R$</span><span class="fit" id="cbFit" data-v="${money2(CB.buyin)}"><input id="cbVal" size="1" placeholder="0,00" inputmode="decimal" autocomplete="off" value="${money2(CB.buyin)}" aria-label="Valor da entrada"></span><button class="edit" data-a="cbEdit" aria-label="Editar valor">${svg('i-pen')}</button></label>
         <small id="cbAfter"></small><span class="prize" id="cbPrize"></span></div>
       <span class="lbl">Ou escolha um valor de mesa</span>
       <div class="stake-grid" id="cbGrid">${BUYINS.map(v => stakePill({v, q: 0}, 'M', CB.buyin === v, `data-cbb="${v}"`, {money: true, prize: +(v * seatsOf(CB.fmt) * .9).toFixed(2)})).join('')}</div>
@@ -124,7 +125,7 @@ SCREENS.cbattle = {cls: 'cflow', render: () => {
   if (CB.step !== 4) return;
   const i = $('#cbVal');
   i.addEventListener('input', () => { CB.buyin = parseMoney(i.value); paintBuyin(); });
-  i.addEventListener('blur', () => { if (CB.buyin) i.value = money2(CB.buyin); });
+  i.addEventListener('blur', () => { if (CB.buyin) i.value = money2(CB.buyin); paintBuyin(); });
   i.addEventListener('keydown', e => { if (e.key === 'Enter') i.blur(); });
   paintBuyin();
 }, click: e => {
