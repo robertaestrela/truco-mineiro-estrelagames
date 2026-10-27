@@ -43,13 +43,12 @@ function dkHeader() {
 }
 
 /* ---------- menu da esquerda ---------- */
-const DK_ACCOUNT = [['profile', 'user', 'Perfil'], ['wallet', 'wallet', 'Carteira'], ['history', 'timer', 'Histórico'], ['ranking', 'podium', 'Ranking'], ['settings', 'gear', 'Ajustes']];
+const DK_ACCOUNT = [['profile', 'user', 'Perfil'], ['wallet', 'coins', 'Fichas'], ['history', 'timer', 'Histórico'], ['ranking', 'podium', 'Ranking'], ['settings', 'gear', 'Ajustes']];
 function dkActive() {
   const c = CUR;
   if (c === 'pacote' || c === 'picker') return 'loja';
   if (c === 'cbattle' || c === 'sala') return 'batalhas';
   if (c === 'rankGame') return 'lobby';
-  if (c === 'limits') return 'settings';
   if (c === 'jogos' && !hasSkin()) return 'lobby';
   return c;
 }

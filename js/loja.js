@@ -60,7 +60,7 @@ SCREENS.pacote = {cls: 'pack', render: ({id}) => {
     </div></div></div>${navbar('loja')}`;
 }};
 function buyPack(id) {
-  if (ST.saldo < PRICE) { toast('Saldo insuficiente · deposite pela Carteira'); return; }
+  if (ST.saldo < PRICE) { toast('Saldo insuficiente · compre fichas no + do saldo'); return; }
   ST.saldo = +(ST.saldo - PRICE).toFixed(2); ST.owned[id] = true; ST.pack = id;
   refreshChrome(); unlockedSheet(id);
 }

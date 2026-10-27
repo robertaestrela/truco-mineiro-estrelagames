@@ -45,7 +45,7 @@ ACT.bAll = () => { BL.filter = 'todos'; BL.q = ''; rerender(); };
 function openBattle(id) {
   const b = BATTLES.find(x => x.id === id); if (!b) return;
   if (b.state === 'Em jogo') { toast(`${b.name} já começou · ${b.players.length}/${seatsOf(b.fmt)} jogando`); return; }
-  if (b.owner !== ST.nick && ST.saldo < b.buyin) { toast('Saldo insuficiente · deposite pela Carteira'); return; }
+  if (b.owner !== ST.nick && ST.saldo < b.buyin) { toast('Saldo insuficiente · compre fichas no + do saldo'); return; }
   if (b.locked && b.owner !== ST.nick) passwordSheet(b); else joinBattle(b);
 }
 
@@ -69,7 +69,24 @@ ACT.pwGo = id => { const b = BATTLES.find(x => x.id === id); if (PW === b.pass) 
 
 /* ---------- criar batalha (BT02–BT06) ---------- */
 const CB = {step: 1, game: 'truco', variant: 'Mineiro', fmt: '2x2', rounds: 3, buyin: 5, access: 'aberta', pass: ''};
-const BUYINS = [1, 2, 5, 10, 25, 50];
+const BUYINS = [1, 5, 10, 25, 50, 100];
+const BUYIN_MIN = 1, BUYIN_MAX = 1000;
+const money2 = v => (+v).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+// "12,50", "12.5", "1.000,00" → número
+function parseMoney(t) { t = String(t).replace(/[^\d,.]/g, ''); if (t.includes(',')) t = t.replace(/\./g, '').replace(',', '.'); else if ((t.match(/\./g) || []).length > 1 || /\.\d{3}$/.test(t)) t = t.replace(/\./g, ''); return t ? Math.round(parseFloat(t) * 100) / 100 : 0; }
+function buyinError(v) { if (!v || v < BUYIN_MIN) return `Mínimo ${fmt(BUYIN_MIN)}`; if (v > BUYIN_MAX) return `Máximo ${fmt(BUYIN_MAX)}`; if (v > ST.saldo) return `Saldo insuficiente · você tem ${fmt2(ST.saldo)}`; return ''; }
+// atualiza o passo 4 sem redesenhar a tela (o campo continua com o foco)
+function paintBuyin() {
+  const v = CB.buyin, n = seatsOf(CB.fmt), pot = +(v * n * .9).toFixed(2), err = buyinError(v);
+  const box = $('#cbBox'); if (!box) return;
+  box.classList.toggle('err', !!err);
+  $('#cbAfter').textContent = err || `Saldo depois de criar: ${fmt2(+(ST.saldo - v).toFixed(2))}`;
+  $('#cbPrize').textContent = err ? '' : `Prêmio ${fmt2(pot)}`; $('#cbPrize').hidden = !!err;
+  $$('#cbGrid [data-cbb]').forEach(el => el.classList.toggle('on', +el.dataset.cbb === v));
+  const each = CB.fmt === 'Mesa de 6' ? `o 1º leva ${fmt2(prizeOf(v, 3.6))} e o 2º leva ${fmt2(prizeOf(v))}` : n === 4 ? `cada jogador da dupla vencedora leva ${fmt2(prizeOf(v))}` : `o vencedor leva ${fmt2(prizeOf(v))}`;
+  $('#cbHelp').textContent = err ? `Digite um valor de ${fmt(BUYIN_MIN)} a ${fmt(BUYIN_MAX)}, até o seu saldo, ou escolha uma mesa.` : `Com ${n} jogadores a ${fmt2(v)}, o prêmio é ${fmt2(pot)}: ${each} · taxa da mesa 10%.`;
+  const b = $('#view .cta .btn'); if (b) b.disabled = !!err;
+}
 const STEP_NAMES = ['Jogo', 'Modo e formato', 'Rodadas', 'Buy-in', 'Quem pode entrar'];
 function cbFormatFix() { const g = gameById(CB.game); if (!g.variants.includes(CB.variant) || (g.soonV || []).includes(CB.variant)) CB.variant = g.def; CB.fmt = CB.game === 'truco' ? (CB.fmt === '1x1' ? '1x1' : '2x2') : formatOf(CB.game, CB.variant); }
 SCREENS.cbattle = {cls: 'cflow', render: () => {
@@ -84,10 +101,13 @@ SCREENS.cbattle = {cls: 'cflow', render: () => {
   }
   if (s === 3) body = `<h2>Quantas rodadas?</h2>${tabs(['1', '3', '5', '10'], String(CB.rounds), '', 'cbr')}<p class="help">Vence quem ganhar mais rodadas. Em caso de empate, uma rodada extra decide.</p>`;
   if (s === 4) {
-    const n = seatsOf(CB.fmt);
-    body = `<h2>Quanto vale a entrada?</h2><span class="lbl">Buy-in por jogador</span>
-      <div class="stake-grid">${BUYINS.map(v => stakePill({v, q: 0}, 'M', CB.buyin === v, `data-cbb="${v}"`, {money: true, prize: +(v * n * .9).toFixed(2)})).join('')}</div>
-      <p class="help">Com ${n} jogadores a ${fmt(CB.buyin)}, o prêmio é ${fmt(+(CB.buyin * n * .9).toFixed(2))} · taxa da casa 10%.</p>`;
+    // valor livre primeiro (a pessoa digita) e, embaixo, os valores das mesas como atalho
+    body = `<h2>Quanto vale a entrada?</h2><span class="lbl">Buy-in por jogador · de ${fmt(BUYIN_MIN)} a ${fmt(BUYIN_MAX)}</span>
+      <div class="bival" id="cbBox"><label class="amt-in"><span class="cur">R$</span><input id="cbVal" inputmode="decimal" autocomplete="off" value="${money2(CB.buyin)}" aria-label="Valor da entrada"><button class="edit" data-a="cbEdit" aria-label="Editar valor">${svg('i-pen')}</button></label>
+        <small id="cbAfter"></small><span class="prize" id="cbPrize"></span></div>
+      <span class="lbl">Ou escolha um valor de mesa</span>
+      <div class="stake-grid" id="cbGrid">${BUYINS.map(v => stakePill({v, q: 0}, 'M', CB.buyin === v, `data-cbb="${v}"`, {money: true, prize: +(v * seatsOf(CB.fmt) * .9).toFixed(2)})).join('')}</div>
+      <p class="help" id="cbHelp"></p>`;
   }
   if (s === 5) {
     if (!CB.pass) CB.pass = String(Math.floor(1000 + Math.random() * 9000));
@@ -100,6 +120,13 @@ SCREENS.cbattle = {cls: 'cflow', render: () => {
   }
   return `${header()}${ptop('Criar batalha', `Passo ${s} de 5 · ${STEP_NAMES[s - 1]}`, 'cbBack')}<div class="scroll"><div class="content">${body}</div></div>
     <div class="cta">${btn(cta, 'pri', 'l', `data-a="cbNext"`)}</div>`;
+}, after: () => {
+  if (CB.step !== 4) return;
+  const i = $('#cbVal');
+  i.addEventListener('input', () => { CB.buyin = parseMoney(i.value); paintBuyin(); });
+  i.addEventListener('blur', () => { if (CB.buyin) i.value = money2(CB.buyin); });
+  i.addEventListener('keydown', e => { if (e.key === 'Enter') i.blur(); });
+  paintBuyin();
 }, click: e => {
   const t = e.target.closest('[data-cbg],[data-cbv],[data-cbf],[data-cbr],[data-cbb],[data-cba]'); if (!t) return;
   const d = t.dataset;
@@ -107,16 +134,18 @@ SCREENS.cbattle = {cls: 'cflow', render: () => {
   if (d.cbv) { if ((game().soonV || []).includes(d.cbv) || (gameById(CB.game).soonV || []).includes(d.cbv)) { toast(`${d.cbv} chega em breve`); return; } CB.variant = d.cbv; cbFormatFix(); }
   if (d.cbf) CB.fmt = d.cbf;
   if (d.cbr) CB.rounds = +d.cbr;
-  if (d.cbb) CB.buyin = +d.cbb;
+  if (d.cbb) { CB.buyin = +d.cbb; const i = $('#cbVal'); if (i) i.value = money2(CB.buyin); paintBuyin(); return; }
   if (d.cba) CB.access = d.cba;
   rerender();
 }};
 Object.assign(ACT, {
   cbStart: () => { Object.assign(CB, {step: 1, pass: '', access: 'aberta'}); cbFormatFix(); go('cbattle'); },
   cbBack: () => { if (CB.step > 1) { CB.step--; rerender(); } else back(); },
+  cbEdit: () => { const i = $('#cbVal'); if (i) { i.focus(); i.select(); } },
   cbNext: () => {
+    if (CB.step === 4) { const e = buyinError(CB.buyin); if (e) { toast(e); return; } }
     if (CB.step < 5) { CB.step++; go('cbattle', {}, {noHist: true}); return; }
-    if (ST.saldo < CB.buyin) { toast('Saldo insuficiente · deposite pela Carteira'); return; }
+    if (ST.saldo < CB.buyin) { toast('Saldo insuficiente · compre fichas no + do saldo'); return; }
     const b = {id: 'B' + (200 + BATTLES.length), name: `Batalha do ${ST.nick}`, owner: ST.nick, game: CB.game, variant: CB.variant, fmt: CB.fmt, rounds: CB.rounds, buyin: CB.buyin, state: 'Aguardando', locked: CB.access === 'fechada', pass: CB.pass, players: []};
     BATTLES.unshift(b);
     HIST = HIST.filter(h => h[0] !== 'cbattle');
@@ -224,7 +253,7 @@ function battleRoundEnd(r) {
     const won = S.wins[0] > S.wins[1], pay = winnerPay(b);
     if (won) ST.saldo = +(ST.saldo + pay).toFixed(2);
     ST.series = null;
-    showResult({win: won, seriesFinal: true, title: won ? 'Vitória' : 'Derrota', sub: won ? `Você venceu a batalha em ${S.round} ${S.round === 1 ? 'rodada' : 'rodadas'}` : 'Não foi dessa vez', value: won ? `+ ${fmt2(pay)}` : `− ${fmt2(b.buyin)}`, caption: won ? 'Prêmio já está na sua carteira' : 'Valor da entrada', ctx,
+    showResult({win: won, seriesFinal: true, title: won ? 'Vitória' : 'Derrota', sub: won ? `Você venceu a batalha em ${S.round} ${S.round === 1 ? 'rodada' : 'rodadas'}` : 'Não foi dessa vez', value: won ? `+ ${fmt2(pay)}` : `− ${fmt2(b.buyin)}`, caption: won ? 'Prêmio já está no seu saldo' : 'Valor da entrada', ctx,
       left: teamHTML([[ST.nick, ST.crew, ST.g]], 'Você', 'rodadas'), score: `${S.wins[0]} × ${S.wins[1]}`, right: teamHTML([['x', 'comandante', 'ele']], vs, 'rodadas', true), gameColor: gameById(b.game).color,
       hist: `Batalha · ${gameById(b.game).name}`, delta: won ? pay - b.buyin : -b.buyin,
       backLabel: 'Voltar às batalhas', onBack: () => go('batalhas', {}, {noHist: true, reset: true}), againLabel: 'Nova batalha', again: () => { go('batalhas', {}, {noHist: true, reset: true}); ACT.cbStart(); }});

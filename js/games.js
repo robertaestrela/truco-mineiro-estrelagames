@@ -261,7 +261,7 @@ function endMatch() {
   const P = G.players, one = G.one, tm = one ? '1x1' : '2x2', tid = G.tableId, v = G.variant;
   const pl = k => [P[k].name, P[k].crew, P[k].g];
   showResult({win, sub: win ? (one ? 'Você fechou os 12 pontos' : `Você e ${PAR.n} fecharam os 12 pontos`) : (one ? `${OPP.n} fechou os 12 pontos` : `${OPP.n} e ${OPP2.n} fecharam os 12 pontos`),
-    value: win ? `+ ${fmt2(prize)}` : `− ${fmt2(ST.stake)}`, caption: win ? 'Prêmio já está na sua carteira' : 'Valor da entrada',
+    value: win ? `+ ${fmt2(prize)}` : `− ${fmt2(ST.stake)}`, caption: win ? 'Prêmio já está no seu saldo' : 'Valor da entrada',
     ctx: `Mesa ${tid} · Truco ${v} · ${tm}`, gameColor: v === 'Paulista' ? 'var(--game-paulista)' : 'var(--game-truco)',
     left: teamHTML(one ? [pl(0)] : [pl(0), pl(2)], one ? 'Você' : 'Nós', one ? `@${esc(ST.nick)}` : `Você e ${PAR.n}`), score: `${G.score[0]} × ${G.score[1]}`,
     right: teamHTML(one ? [pl(2)] : [pl(1), pl(3)], one ? OPP.n : 'Eles', one ? 'adversário' : `${OPP.n} e ${OPP2.n}`, true),
@@ -663,7 +663,7 @@ function pifEndMatch() {
   clearInterval(clockT); clearInterval(pfT); clearTimeout(pfBotT);
   const P = PF.players, tid = PF.tableId, v = cach ? 'Cacheta' : 'Pif-Paf';
   showResult({win, sub: cach ? (win ? `${OPP.n} ficou sem vidas` : 'Suas vidas acabaram') : (win ? 'Você bateu 2 vezes' : `${OPP.n} bateu 2 vezes`),
-    value: win ? `+ ${fmt2(prize)}` : `− ${fmt2(ST.stake)}`, caption: win ? 'Prêmio já está na sua carteira' : 'Valor da entrada',
+    value: win ? `+ ${fmt2(prize)}` : `− ${fmt2(ST.stake)}`, caption: win ? 'Prêmio já está no seu saldo' : 'Valor da entrada',
     ctx: `Mesa ${tid} · ${v} · 1x1`, gameColor: 'var(--game-cacheta)',
     left: teamHTML([[P[0].name, P[0].crew, P[0].g]], 'Você', cach ? 'vidas' : 'batidas'), score: cach ? `${PF.lives[0]} × ${PF.lives[1]}` : `${PF.score[0]} × ${PF.score[1]}`,
     right: teamHTML([[P[1].name, P[1].crew, P[1].g]], OPP.n, cach ? 'vidas' : 'batidas', true),
@@ -1089,7 +1089,7 @@ function buEndMatch() {
   const P = BU.players, tid = BU.tableId, tr = isTr(), name = tr ? 'Tranca' : `Buraco ${BU.variant}`, gid = tr ? 'tranca' : 'buraco', v = BU.variant;
   const pl = k => [P[k].name, P[k].crew, P[k].g];
   showResult({win, tie, sub: win ? `Você e ${PAR.n} fizeram mais pontos` : tie ? 'Mesma pontuação · entrada devolvida' : `${OPP.n} e ${OPP2.n} fizeram mais pontos`,
-    value: win ? `+ ${fmt2(prize)}` : tie ? fmt2(0) : `− ${fmt2(ST.stake)}`, caption: win ? 'Prêmio já está na sua carteira' : tie ? 'Ninguém levou' : 'Valor da entrada',
+    value: win ? `+ ${fmt2(prize)}` : tie ? fmt2(0) : `− ${fmt2(ST.stake)}`, caption: win ? 'Prêmio já está no seu saldo' : tie ? 'Ninguém levou' : 'Valor da entrada',
     ctx: `Mesa ${tid} · ${name} · 2x2`, gameColor: tr ? 'var(--game-tranca)' : 'var(--game-buraco)',
     left: teamHTML([pl(0), pl(2)], 'Nós', `Você e ${PAR.n}`), score: `${a.total} × ${b.total}`, right: teamHTML([pl(1), pl(3)], 'Eles', `${OPP.n} e ${OPP2.n}`, true),
     extra: `<p class="rlines">Nós: ${buLines(a).join(' · ')}<br>Eles: ${buLines(b).join(' · ')}</p>`,
@@ -1664,7 +1664,7 @@ function pkEnd(place) {
   const order = [...alive, ...P.filter(p => p.place).sort((a, b) => a.place - b.place)];
   const rank = six ? `<div class="pkranks">${order.map((p, k) => { const pl = p.place || k + 1, live = !p.place; return `<div class="pkrank ${p === P[0] ? 'me' : ''}"><b>${pl}º</b>${hex(p.crew, p.g, 's', 0, false)}<span>${p === P[0] ? 'Você' : esc(p.name)}${live ? ' · jogando' : ''}</span><i>${live ? fmtc(p.stack) + ' fichas' : pl === 1 ? fmt(prizeOf(ST.stake, 3.6)) : pl === 2 ? fmt(prizeOf(ST.stake)) : '—'}</i></div>`; }).join('')}</div>` : '';
   showResult({win: place === 1 || (six && place === 2 && !ST.series), title, sub,
-    value: prize ? `+ ${fmt2(prize)}` : `− ${fmt2(ST.stake)}`, caption: prize ? 'Prêmio já está na sua carteira' : 'Valor da entrada',
+    value: prize ? `+ ${fmt2(prize)}` : `− ${fmt2(ST.stake)}`, caption: prize ? 'Prêmio já está no seu saldo' : 'Valor da entrada',
     ctx: `Mesa ${tid} · Poker · ${six ? 'mesa de 6' : '1x1'} · Sit & Go`, gameColor: 'var(--game-poker)',
     left: six ? '' : teamHTML([[P[0].name, P[0].crew, P[0].g]], 'Você', `${fmtc(P[0].stack)} fichas`), score: six ? '' : (place === 1 ? '1 × 0' : '0 × 1'),
     right: six ? '' : teamHTML([[P[1].name, P[1].crew, P[1].g]], P[1].name, `${fmtc(P[1].stack)} fichas`, true),

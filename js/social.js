@@ -1,4 +1,4 @@
-/* EstrelaGames · Chat, Notificações, Perfil, Histórico, Card do jogador, Ajustes, Limites, Carteira e Ranking */
+/* EstrelaGames · Chat, Notificações, Perfil, Histórico, Card do jogador, Ajustes, Fichas (redireciona) e Ranking */
 'use strict';
 
 /* ======================================================================
@@ -107,9 +107,9 @@ Object.assign(ACT, {
    ====================================================================== */
 const NOTIFS = [
   {id: 1, icon: 'gift', t: 'Bônus diário liberado', d: 'Você tem R$ 5,00 para resgatar na Loja.', at: 'há 1 h', unread: true, fav: false},
-  {id: 2, icon: 'banknote', t: 'Depósito confirmado', d: 'R$ 50,00 caíram na sua carteira via Pix.', at: 'há 2 h', unread: true, fav: false},
+  {id: 2, icon: 'coins', t: 'Fichas compradas', d: 'R$ 50,00 em fichas já estão no seu saldo.', at: 'há 2 h', unread: true, fav: false},
   {id: 3, icon: 'swords', t: 'Batalha do Alfonso começa já', d: 'Faltam 5 min. Sua vaga na mesa está garantida.', at: 'ontem', unread: false, fav: true},
-  {id: 4, icon: 'verified', t: 'Verificação aprovada', d: 'Seus documentos foram aprovados. Já pode sacar.', at: 'há 3 dias', unread: false, fav: false}
+  {id: 4, icon: 'verified', t: 'Verificação aprovada', d: 'Seus documentos foram aprovados. Já pode sacar suas fichas.', at: 'há 3 dias', unread: false, fav: false}
 ];
 let NTAB = 'todas';
 function closeNotifs() { const d = $('#ndrop'); if (d) d.remove(); }
@@ -152,7 +152,7 @@ SCREENS.profile = {cls: 'prof', render: () => {
     ${rw ? `<div role="button" tabindex="0" class="uopt owned" data-a="rewardNow">${ic('gift')}<span class="tx"><b>Recompensa guardada</b><small>${crewName(ST.reward.c, ST.reward.g)} · toque para ativar</small></span>${svg('i-chev-r')}</div>` : ''}
     <div class="gcard stats"><div class="r">${stat('gamepad', '1.280', 'partidas')}${stat('trophy', '742', 'vitórias')}</div><div class="r">${stat('coins', '58%', 'taxa de vitória')}${stat('crown', '312', 'vezes em 1º')}</div></div>
     <div class="grp"><div class="gcard">
-      ${li('wallet', 'wallet', 'Carteira', '', fmt2(ST.saldo))}${li('go:history', 'timer', 'Histórico de partidas')}${li('go:ranking', 'podium', 'Ranking')}${li('go:settings', 'gear', 'Ajustes')}${li('toast:Ajuda e suporte · fale com a gente pelo chat', 'headset', 'Ajuda e suporte')}
+      ${li('wallet', 'coins', 'Fichas', '', fmt2(ST.saldo))}${li('go:history', 'timer', 'Histórico de partidas')}${li('go:ranking', 'podium', 'Ranking')}${li('go:settings', 'gear', 'Ajustes')}${li('toast:Ajuda e suporte · fale com a gente pelo chat', 'headset', 'Ajuda e suporte')}
     </div><button class="logout" data-a="logout">Sair da conta</button></div>
   </div></div>${navbar(homeTab())}`;
 }};
@@ -202,95 +202,87 @@ Object.assign(ACT, {
 });
 
 /* ======================================================================
-   AJUSTES (M01) · Limites (M02) · Personalizar
+   AJUSTES (M01) · Personalizar
    ====================================================================== */
-const PREFS = {music: true, sfx: true, limit: 500, period: 'semana', used: 120};
+const PREFS = {music: true, sfx: true};
 SCREENS.settings = {cls: 'prof', render: () => {
   const sw = (k, i, t) => `<button class="li" data-a="pref:${k}"><span class="itile">${ic(i)}</span><span class="tx"><b>${t}</b></span><span class="tgl-sw ${PREFS[k] ? 'on' : ''}"></span></button>`;
   const ph = ST.phone || '(31) 99651-6899', phm = ph.replace(/(\(\d\d\) \d)\d{3}(\d)-?(\d{4})/, '$1…$3');
   return `<div class="pg-top">${header()}${ptop('Ajustes')}</div><div class="scroll"><div class="pcontent">
-    <div class="grp"><small>CONTA</small><div class="gcard">${li('toast:Dados pessoais · em breve no protótipo', 'user', 'Dados pessoais', 'Nome, CPF e data de nascimento')}${li('toast:Celular verificado', 'phone', 'Celular', '', phm)}${li('toast:Adicionar e-mail · em breve', 'mail', 'E-mail', '', 'Adicionar', 'link')}${li('verify', 'verified', 'Verificação de identidade', 'Obrigatória antes do 1º saque', ST.verified ? 'Aprovada' : 'Pendente', ST.verified ? '' : 'warn')}</div></div>
+    <div class="grp"><small>CONTA</small><div class="gcard">${li('toast:Dados pessoais · em breve no protótipo', 'user', 'Dados pessoais', 'Nome, CPF e data de nascimento')}${li('toast:Celular verificado', 'phone', 'Celular', '', phm)}${li('toast:Adicionar e-mail · em breve', 'mail', 'E-mail', '', 'Adicionar', 'link')}</div></div>
     <div class="grp"><small>PERSONALIZAR</small><div class="gcard">${li('custom', 'star', 'Avatar, mesa e baralho', 'Muda na hora, em todos os jogos', hasSkin() ? crewName(ST.crew, ST.g) : 'Sem skin')}</div></div>
     <div class="grp"><small>SEGURANÇA</small><div class="gcard">${li('toast:Trocar senha · em breve no protótipo', 'key', 'Trocar senha')}${li('logout', 'friends', 'Trocar de conta')}</div></div>
     <div class="grp"><small>HISTÓRICO</small><div class="gcard">${li('go:history', 'calendar', 'Histórico do lobby')}${li('toast:Histórico exportado para o seu e-mail', 'export', 'Exportar histórico')}</div></div>
     <div class="grp"><small>PREFERÊNCIAS</small><div class="gcard">${li('toast:Mais idiomas em breve', 'globe', 'Idioma', '', 'Português')}${sw('music', 'music', 'Música')}${sw('sfx', 'sound', 'Efeitos sonoros')}</div></div>
-    <div class="grp"><small>LIMITES</small><div class="gcard">${li('go:limits', 'wallet', 'Limite de depósito', '', `${fmt(PREFS.limit)} / ${PREFS.period}`)}</div></div>
+    <div class="grp"><small>FICHAS</small><div class="gcard">${li('wallet', 'coins', 'Fichas', 'Comprar, sacar, limites e verificação')}</div></div>
     <div class="grp"><small>SOBRE</small><div class="gcard">${li('toast:Termos de uso · em breve', 'scroll', 'Termos de uso')}${li('toast:Privacidade · em breve', 'lock', 'Privacidade')}${li('toast:Certificado · em breve', 'medal', 'Certificado')}<div class="li"><span class="itile">${ic('gear')}</span><span class="tx"><b>Versão</b></span><span class="val">0.1.0 · build 42</span></div></div></div>
     <button class="logout" data-a="logout">Sair da conta</button>
   </div></div>${navbar(homeTab())}`;
 }};
-SCREENS.limits = {cls: 'prof', render: () => `<div class="pg-top">${header()}${ptop('Limites de depósito')}</div><div class="scroll"><div class="pcontent">
-  <div class="limit-intro">${ic('verified')}<span>Você controla o ritmo. Limites valem na hora; aumentos só depois de 24 h.</span></div>
-  <div class="lbox">${stitle('Limite de depósito', 'Quanto você pode depositar por período')}
-    ${tabs([['dia', 'Dia'], ['semana', 'Semana']], PREFS.period, '', 'lper')}
-    <div class="field"><label for="limIn">Limite ${PREFS.period === 'dia' ? 'diário' : 'semanal'}</label><div class="box"><input id="limIn" inputmode="decimal" value="${fmt2(PREFS.limit)}"></div></div>
-    <div class="pbar"><div class="h"><span>Usado ${PREFS.period === 'dia' ? 'hoje' : 'esta semana'}</span><b>${fmt(PREFS.used)} de ${fmt(PREFS.limit)}</b></div><div class="tr"><i style="width:${Math.min(100, PREFS.used / PREFS.limit * 100)}%"></i></div></div>
-    ${btn('Salvar limite', 'pri', 'm m44', 'data-a="saveLimit"', 'wide')}</div>
-  <div class="lbox" style="padding:16px;text-align:center;font:500 10px/1.4 var(--f-ui);color:var(--text-subtle)">Precisa de ajuda? Fale com o suporte, a gente responde no chat.</div>
-</div></div>${navbar(homeTab())}`, click: e => { const t = e.target.closest('[data-lper]'); if (t) { PREFS.period = t.dataset.lper; rerender(); } }};
 Object.assign(ACT, {
   pref: k => { PREFS[k] = !PREFS[k]; rerender(); },
-  custom: () => personalizar(),
-  saveLimit: () => { const v = parseFloat(($('#limIn').value || '').replace(/[^\d,]/g, '').replace(',', '.')); if (!(v > 0)) { toast('Digite um valor válido'); return; } const up = v > PREFS.limit; if (!up) PREFS.limit = v; rerender(); toast(up ? 'Aumento agendado · vale em 24 h' : `Limite de ${fmt(v)} salvo · vale na hora`); },
-  verify: () => walletVerify()
+  custom: () => personalizar()
 });
 
 /* ======================================================================
-   CARTEIRA (bottom sheet) · Depositar → Pix → Confirmado · Sacar → Verificação
+   FICHAS · comprar, sacar, limites e dados ficam na página de Fichas (fichas/index.html).
+   O + do saldo (e Fichas no Perfil, em Ajustes e no menu do desktop) mostra "Redirecionando…" e abre a página
+   na mesma aba. O app guarda onde estava; na volta (?resume) reabre no mesmo ponto, com o saldo que a página devolveu.
    ====================================================================== */
-const WAL = {tab: 'dep', amt: 50, out: 100};
-function walletSheet(tab = WAL.tab) {
-  WAL.tab = tab;
-  const bal = `<div class="wbal">${ic('wallet')}<span class="a"><small>Saldo disponível</small><b>${fmt2(ST.saldo)}</b></span><span class="b"><small>Bônus</small><b class="prize">${fmt2(ST.bonus)}</b></span></div>`;
-  const body = tab === 'dep'
-    ? `<span class="wlbl">Quanto você quer depositar?</span><div class="amt-grid">${[20, 50, 100, 200].map(v => `<button class="amt ${WAL.amt === v ? 'on' : ''}" data-a="walAmt:${v}">${fmt(v)}</button>`).join('')}</div>
-       <div class="field"><label for="walIn">Outro valor</label><div class="box inset"><input id="walIn" inputmode="decimal" value="${fmt2(WAL.amt)}"></div></div>
-       <div class="winfo">${ic('real-sign')}<span>Pix · cai na hora · sem taxa · mínimo R$ 10</span></div>
-       ${btn(`Gerar Pix · ${fmt(WAL.amt)}`, 'pri', 'l', 'data-a="walDep"', 'wide')}`
-    : `<div class="field"><label>Chave Pix</label><div class="box inset"><input value="CPF · 123.456.789-00" readonly></div></div>
-       <div class="field"><label for="walOut">Valor do saque</label><div class="box inset"><input id="walOut" inputmode="decimal" value="${fmt2(WAL.out)}"></div></div>
-       <div class="winfo">${ic('real-sign')}<span>Saque mínimo R$ 20 · cai em até 1 h · sem taxa · só para contas no seu CPF</span></div>
-       ${btn(`Sacar ${fmt(WAL.out)}`, 'pri', 'l', 'data-a="walOutDo"', 'wide')}`;
-  openSheet(`<div class="wh"><b>Carteira</b><button class="xbtn" data-a="closeSheet" aria-label="Fechar">${svg('i-x')}</button></div>${tabs([['dep', 'Depositar'], ['saq', 'Sacar']], tab, '', 'wtab')}${bal}${body}`, {cls: 'g16 wallet'});
-  $$('#sheet [data-wtab]').forEach(b => b.onclick = () => walletSheet(b.dataset.wtab));
-  const wi = $('#walIn'); if (wi) wi.onchange = () => { const v = parseFloat(wi.value.replace(/[^\d,]/g, '').replace(',', '.')); if (v > 0) { WAL.amt = v; walletSheet('dep'); } };
-  const wo = $('#walOut'); if (wo) wo.onchange = () => { const v = parseFloat(wo.value.replace(/[^\d,]/g, '').replace(',', '.')); if (v > 0) { WAL.out = v; walletSheet('saq'); } };
-}
-const QR = (() => { let s = ''; for (let y = 0; y < 21; y++) for (let x = 0; x < 21; x++) { const f = (x < 7 && y < 7) || (x > 13 && y < 7) || (x < 7 && y > 13); const on = f ? (x % 6 === 0 || y % 6 === 0 || (x % 7 > 1 && x % 7 < 5 && y % 7 > 1 && y % 7 < 5) || (x > 13 && (x - 14) % 6 === 0)) : ((x * 7 + y * 13 + x * y) % 3 === 0); if (on) s += `<rect x="${x}" y="${y}" width="1" height="1"/>`; } return `<svg viewBox="0 0 21 21" fill="#0e141b">${s}</svg>`; })();
-let pixT;
-Object.assign(ACT, {
-  wallet: () => walletSheet('dep'),
-  walAmt: v => { WAL.amt = +v; walletSheet('dep'); },
-  walDep: () => {
-    if (WAL.amt < 10) { toast('Depósito mínimo R$ 10'); return; }
-    openSheet(`${sheetHead('real-sign', 'Pague com Pix', `Expira em <span id="pixExp">29:58</span> · ${fmt2(WAL.amt)}`)}<div class="qr">${QR}</div>
-      <div class="pixcode">00020126580014br.gov.bcb.pix0136a1b2c3d4-e5f6-7890-abcd-ef0123456789</div>
-      ${btn('Copiar código Pix', 'pri', 'l', 'data-a="pixCopy"', 'wide')}<p class="center-tx" style="font-size:12px">Assim que o pagamento cair, você volta pro jogo automaticamente.</p>`, {cls: 'g16'});
-    clearTimeout(pixT); pixT = setTimeout(() => { if ($('#pixExp')) ACT.pixPaid(); }, 4200);
-  },
-  pixCopy: () => { try { navigator.clipboard.writeText('00020126580014br.gov.bcb.pix0136a1b2c3d4'); } catch (e) {} toast('Código Pix copiado · simulando o pagamento…'); clearTimeout(pixT); pixT = setTimeout(() => { if ($('#pixExp')) ACT.pixPaid(); }, 1600); },
-  pixPaid: () => {
-    ST.saldo = +(ST.saldo + WAL.amt).toFixed(2); PREFS.used += WAL.amt;
-    NOTIFS.unshift({id: Date.now(), icon: 'banknote', t: 'Depósito confirmado', d: `${fmt2(WAL.amt)} caíram na sua carteira via Pix.`, at: 'agora', unread: true, fav: false}); ST.unread++;
-    openSheet(`${sheetHead('wallet', 'Carteira', '', true)}${ic('check', 'done-ic')}<h2 style="margin:0;text-align:center;font:700 24px/1.2 var(--f-display)">Depósito confirmado!</h2><b class="big-v">+ ${fmt2(WAL.amt)}</b>
-      <p class="center-tx">Já está no seu saldo: ${fmt2(ST.saldo)}. Bora pra fila?</p>${btn('Voltar a jogar', 'pri', 'l', 'data-a="closeSheet"', 'wide')}`, {cls: 'g16'});
-    refreshChrome();
-  },
-  walOutDo: () => {
-    if (WAL.out < 20) { toast('Saque mínimo R$ 20'); return; }
-    if (WAL.out > ST.saldo) { toast('Valor maior que o seu saldo'); return; }
-    if (!ST.verified) { walletVerify(true); return; }
-    ST.saldo = +(ST.saldo - WAL.out).toFixed(2); closeSheet(); refreshChrome(); toast(`Saque de ${fmt(WAL.out)} solicitado · cai em até 1 h`);
+const FICHAS_URL = 'fichas/index.html?v=20261027h';
+const SS = {
+  get: k => { try { return JSON.parse(sessionStorage.getItem(k)); } catch (e) { return null; } },
+  set: (k, v) => { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+  del: k => { try { sessionStorage.removeItem(k); } catch (e) {} }
+};
+// telas que voltam como estavam (as outras dependem de algo em andamento e voltam para o início)
+const RESUME_OK = ['jogos', 'lobby', 'chat', 'loja', 'batalhas', 'profile', 'history', 'ranking', 'settings'];
+ACT.wallet = () => {
+  if ($('#redir')) return;
+  closeNotifs(); closeSheet();
+  SS.set('eg.fichas', Object.assign(SS.get('eg.fichas') || {}, {saldo: ST.saldo, bonus: ST.bonus, nick: ST.nick, crew: ST.crew, g: ST.g, verified: !!ST.verified}));
+  SS.set('eg.resume', {st: ST, cur: CUR, curp: CURP, notifs: NOTIFS, history: HISTORY, battles: BATTLES}); SS.set('eg.away', 1);
+  const r = document.createElement('div'); r.className = 'redir'; r.id = 'redir';
+  r.innerHTML = `<div class="card" role="status">${ic('coins')}<span class="tx"><b>Redirecionando…</b><span>Levando você para sua carteira e fichas.</span></span><i class="bar"><i></i></i></div>`;
+  $('#app').appendChild(r);
+  setTimeout(() => { location.href = FICHAS_URL; }, 1400);
+};
+// o que aconteceu na página de Fichas: saldo novo, verificação e as compras/saques feitos lá
+function fichasSync() {
+  const f = SS.get('eg.fichas'); let got = 0, out = 0;
+  if (f) {
+    ST.saldo = f.saldo; ST.bonus = f.bonus; ST.verified = !!f.verified;
+    (f.events || []).forEach(e => {
+      if (e.t === 'compra') { got += e.v; NOTIFS.unshift({id: Date.now() + NOTIFS.length, icon: 'coins', t: 'Fichas compradas', d: `${fmt2(e.v)} em fichas já estão no seu saldo.`, at: 'agora', unread: true, fav: false}); }
+      else if (e.t === 'saque') out += e.v;
+    });
+    f.events = []; SS.set('eg.fichas', f);
   }
-});
-function walletVerify(thenOut) {
-  openSheet(`${sheetHead('verified', 'Verificação', '')}<h2 style="margin:0;font:700 24px/1.2 var(--f-display)">Verifique sua identidade</h2>
-    <p class="qinfo" style="text-align:left">Só no primeiro saque, leva 1 minuto. É exigência legal para apostas no Brasil.</p>
-    <div class="field"><label>CPF</label><div class="box"><input value="123.456.789-00" inputmode="numeric"></div></div>
-    <div class="field"><label>Data de nascimento</label><div class="box"><input value="14/03/1998" inputmode="numeric"></div></div>
-    ${btn(thenOut ? 'Verificar e sacar' : 'Verificar', 'pri', 'l', `data-a="verifyDo:${thenOut ? 1 : 0}"`, 'wide')}${btn('Fazer depois', 'sec', 'm m44', 'data-a="closeSheet"', 'wide')}`, {cls: 'g16'});
+  ST.unread = NOTIFS.filter(n => n.unread).length;
+  if (got || out) setTimeout(() => {
+    const t = document.createElement('div'); t.className = 'gtoast-card fx';
+    t.innerHTML = got ? `${ic('coins')}<div><b>Fichas na conta! + ${fmt2(got)}</b><small>Saldo atualizado: ${fmt2(ST.saldo)}. Bora jogar?</small></div>`
+      : `${ic('coins')}<div><b>Saque de ${fmt2(out)} solicitado</b><small>Cai na sua conta em até 1 h.</small></div>`;
+    $('#app').appendChild(t); setTimeout(() => t.remove(), 3600);
+  }, 400);
 }
-ACT.verifyDo = out => { ST.verified = true; if (+out) { closeSheet(); setTimeout(() => ACT.walOutDo(), 220); } else { closeSheet(); if (CUR === 'settings') rerender(); toast('Identidade verificada'); } };
+function fichasResume(R) {
+  const back = SS.get('eg.back') || {}; SS.del('eg.back'); SS.del('eg.away');
+  Object.assign(ST, R.st, {series: null, training: false});
+  NOTIFS.splice(0, NOTIFS.length, ...(R.notifs || NOTIFS));
+  HISTORY.splice(0, HISTORY.length, ...(R.history || []));
+  if (R.battles) BATTLES.splice(0, BATTLES.length, ...R.battles);
+  fichasSync();
+  const to = back.to && SCREENS[back.to] ? back.to : RESUME_OK.includes(R.cur) ? R.cur : null;
+  if (to) go(to, to === R.cur ? R.curp || {} : {}, {noHist: true, reset: true}); else goHome();
+  try { history.replaceState(null, '', location.pathname + '?home'); } catch (e) {}
+}
+// voltou pelo "voltar" do navegador e a página veio do cache: tira o aviso e atualiza o saldo
+window.addEventListener('pageshow', e => {
+  if (!e.persisted || !$('#redir')) return;
+  $('#redir').remove(); SS.del('eg.away'); SS.del('eg.back');
+  fichasSync(); refreshChrome(); if (CUR === 'profile') rerender();
+});
 
 /* ======================================================================
    RANKING · geral (M01) e por jogo (R01/R02, aberto pelo troféu do lobby)

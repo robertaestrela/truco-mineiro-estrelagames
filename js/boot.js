@@ -10,7 +10,10 @@ function fit() {
 window.addEventListener('resize', fit);
 // atalhos de teste: ?home pula o cadastro · &skin=gamer_ela · &go=tela · &game=sinuca · &act=ação (ex.: ?home&skin=bar_ele&go=profile)
 const QS = new URLSearchParams(location.search);
-if (QS.has('home') || QS.has('go')) {
+// volta da página de Fichas (?resume ou pelo voltar do navegador): reabre o app onde estava; sem nada guardado, abre no início
+const FICHAS_BACK = QS.has('resume') || SS.get('eg.away') ? SS.get('eg.resume') : null;
+if (FICHAS_BACK) fichasResume(FICHAS_BACK);
+else if (QS.has('home') || QS.has('go') || QS.has('resume')) {
   ST.onboarded = true;
   const sk = QS.get('skin'); if (sk) { const [c, g] = sk.split('_'); ST.crew = c; ST.g = g; ST.owned[packOf(c)] = true; }
   if (QS.has('own')) PACK_ORDER.forEach(p => { ST.owned[p] = true; });

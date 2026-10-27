@@ -270,7 +270,7 @@ async function startQueue(tableId, opts = {}) {
   queueAbort = false;
   const training = tableId === 'Treino';
   ST.training = training; if (training) ST.trainSaldo = ST.saldo;
-  if (!training && !ST.series && ST.saldo < ST.stake) { toast('Saldo insuficiente · deposite pela Carteira'); return; }
+  if (!training && !ST.series && ST.saldo < ST.stake) { toast('Saldo insuficiente · compre fichas no + do saldo'); return; }
   const people = opts.people || queuePeople(), g = game();
   openSheet(`${sheetHead(GAME_ICON[g.id], '<span id="qTitle">Buscando jogadores…</span>', training ? `Treino contra bots · ${matchLabel()}` : `${matchLabel()} · ${fmt(ST.stake)} · mesa ${tableId}`, false)}
     <button class="xbtn" data-a="queueCancel" aria-label="Cancelar" style="position:absolute;right:12px;top:20px">${svg('i-x')}</button>

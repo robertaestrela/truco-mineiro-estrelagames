@@ -15,9 +15,11 @@ Protótipo mobile do **EstrelaGames** (redesign *Apple Gamer Style*), fiel ao Fi
 
 **Batalhas:** lobby com busca e filtro por jogo, criação em 5 passos (jogo → modo e formato → rodadas 1/3/5/10 → buy-in → aberta ou fechada com senha), sala de espera que enche com bots e **série de partidas**: vence quem ganhar mais rodadas e leva o prêmio.
 
-Também navegáveis com dados de exemplo: Chat (bônus e mesas no chat), Notificações, Perfil, Histórico, Ranking (geral e por jogo), Ajustes, Limites e Carteira (Pix).
+Também navegáveis com dados de exemplo: Chat (bônus e mesas no chat), Notificações, Perfil, Histórico, Ranking (geral e por jogo) e Ajustes.
 
-**Desktop** (só no computador, com mouse ou trackpad e janela de 1024 px ou mais na horizontal; celular e tablet continuam no layout mobile, mesmo deitados): as telas e os jogos ficam numa coluna 9:16 no meio. Em volta, um header largo (marca, saldo e bônus, sino, perfil), o menu à esquerda (os itens da navbar mais Perfil, Carteira, Histórico, Ranking e Ajustes) e o chat ao vivo do jogo à direita, que vira o Chat da mesa durante a partida. Em partida, o menu e o header ficam travados (sai-se pelo Voltar do jogo). Entre 1024 e 1279 px o menu vira trilho e o chat volta a ser a aba Chat.
+**Fichas** (fora do app, no formato de fichasv2.cacheta.com): o app não tem carteira dentro. O + do saldo (e Fichas no Perfil, em Ajustes e no menu do desktop) mostra "Redirecionando…" e abre `fichas/index.html` na mesma aba: saldo, comprar fichas com Pix (valor → pagamento → confirmação), sacar (identidade no 1º saque → valor → pronto), histórico, limites e dados. "Voltar para o jogo" reabre o app onde estava, com o saldo novo e o aviso "Fichas na conta!" (o estado vai e volta pelo sessionStorage: `eg.resume`, `eg.fichas`, `eg.back`).
+
+**Desktop** (só no computador, com mouse ou trackpad e janela de 1024 px ou mais na horizontal; celular e tablet continuam no layout mobile, mesmo deitados): as telas e os jogos ficam numa coluna 9:16 no meio. Em volta, um header largo (marca, saldo e bônus, sino, perfil), o menu à esquerda (os itens da navbar mais Perfil, Fichas, Histórico, Ranking e Ajustes) e o chat ao vivo do jogo à direita, que vira o Chat da mesa durante a partida. Em partida, o menu e o header ficam travados (sai-se pelo Voltar do jogo). Entre 1024 e 1279 px o menu vira trilho e o chat volta a ser a aba Chat.
 
 ## Rodar
 
@@ -39,14 +41,15 @@ A Sinuca usa Three.js (carregado do jsDelivr), então precisa de internet.
 index.html        casca (telas são renderizadas pelos scripts)
 css/tokens.css    tokens do DS EstrelaGames (cores, tipografia) resolvidos 1:1
 css/ui.css        componentes (header-game, navbar-glass, game-block, tabs, button-glass, stake-pill, table-glass…)
-css/screens.css   telas (cadastro, lobby, Home com skin, Loja, Batalhas, Chat, Perfil, Ranking, Carteira…)
+css/screens.css   telas (cadastro, lobby, Home com skin, Loja, Batalhas, Chat, Perfil, Ranking, Redirecionando…)
 css/game.css      tela de jogo (match-top, match-nav, cartas, chamada de truco, resultado)
 css/desk.css      desktop: header largo, menu, chat ao vivo e a coluna 9:16
 js/core.js        dados e estado
 js/ui.js          componentes em HTML
 js/screens.js     navegação, cadastro, lobby, Home, fila e resultado
 js/loja.js        Loja, pacotes, escolha de personagem e recompensa
-js/social.js      Chat, Notificações, Perfil, Ajustes, Carteira e Ranking
+js/social.js      Chat, Notificações, Perfil, Ajustes, Ranking e o redirecionamento para Fichas
+fichas/           página de Fichas (fora do app): index.html, fichas.css, fichas.js
 js/battles.js     Batalhas e série de partidas
 js/games.js       motores dos jogos e bots
 js/sinuca.js      abre a Sinuca (mesa 3D) e recebe o resultado dela
