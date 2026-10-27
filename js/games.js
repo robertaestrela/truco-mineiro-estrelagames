@@ -26,6 +26,7 @@ function endAllGames() {
   [myT, pfT, buT, pkT, clockT].forEach(t => clearInterval(t)); [pfBotT, buBotT, pkBotT].forEach(t => clearTimeout(t));
   G = null; PF = null; BU = null; PK = null; MODE = 'truco';
   const c = $('#call'); if (c) c.remove();
+  if (typeof closeSinuca === 'function') closeSinuca();
 }
 // HUD estático (sala de espera) no mesmo desenho do match-top
 function hudStatic(b) {

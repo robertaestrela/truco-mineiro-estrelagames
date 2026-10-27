@@ -42,7 +42,7 @@ const GAMES = [
   {id: 'tranca', name: 'Tranca', color: 'var(--game-tranca)', tabs: 'verde', variants: ['Clássica'], def: 'Clássica', pfx: 'R', pts: () => '3.000 pontos'},
   {id: 'buraco', name: 'Buraco', color: 'var(--game-buraco)', tabs: 'verde', variants: ['Aberto', 'Fechado'], def: 'Aberto', pfx: 'B', pts: () => '3.000 pontos'},
   {id: 'poker', name: 'Poker', color: 'var(--game-poker)', tabs: 'verde', variants: ['1x1', 'Mesa de 6'], def: '1x1', pfx: 'P', pts: () => 'Sit & Go'},
-  {id: 'sinuca', name: 'Sinuca', color: 'var(--game-sinuca)', tabs: 'verde', variants: ['Bola 8'], def: 'Bola 8', pfx: 'S', pts: () => 'Bola 8 · 1x1', soon: true}
+  {id: 'sinuca', name: 'Sinuca', color: 'var(--game-sinuca)', tabs: 'verde', variants: ['Bola 8', 'Brasileira'], soonV: ['Brasileira'], def: 'Bola 8', pfx: 'S', pts: () => 'Bola 8 · 1x1'}
 ];
 const gameById = id => GAMES.find(g => g.id === id);
 const game = () => gameById(ST.game);

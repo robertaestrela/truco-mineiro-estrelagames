@@ -10,6 +10,7 @@ const BATTLES = [
   {id: 'B103', name: 'Sexta do truco', owner: 'luana.m', game: 'truco', variant: 'Paulista', fmt: '2x2', rounds: 5, buyin: 25, state: 'Em jogo', players: [['luana.m', 'explorador', 'ela'], ['marcao', 'navegador', 'ele'], ['rafa_10', 'piloto', 'ele'], ['lu.reis', 'engenheiro', 'ela']]},
   {id: 'B104', name: 'Buraco dos amigos', owner: 'amanda.s', game: 'buraco', variant: 'Aberto', fmt: '2x2', rounds: 1, buyin: 2, state: 'Em jogo', locked: true, pass: '1357', players: [['amanda.s', 'engenheiro', 'ela'], ['caio.s', 'explorador', 'ele'], ['dutra77', 'comandante', 'ele'], ['af_07', 'piloto', 'ela']]},
   {id: 'B105', name: 'Desafio relâmpago', owner: 'rafa_10', game: 'tranca', variant: 'Clássica', fmt: '2x2', rounds: 3, buyin: 1, state: 'Aguardando', players: [['rafa_10', 'piloto', 'ele'], ['luana.m', 'explorador', 'ela'], ['marcao', 'navegador', 'ele']]},
+  {id: 'B107', name: 'Bola 8 de sexta', owner: 'joao.sinuca', game: 'sinuca', variant: 'Bola 8', fmt: '1x1', rounds: 3, buyin: 5, state: 'Aguardando', players: [['marcao', 'navegador', 'ele']]},
   {id: 'B106', name: 'All-in da madrugada', owner: 'caio.s', game: 'poker', variant: '1x1', fmt: '1x1', rounds: 3, buyin: 5, state: 'Aguardando', players: [['caio.s', 'explorador', 'ele']]}
 ];
 const GT = {truco: 'var(--game-truco-tint)', cacheta: 'var(--game-cacheta-tint)', buraco: 'var(--game-buraco-tint)', tranca: '#2cc1603d', poker: '#0fa9683d', sinuca: '#2fa35a3d'};

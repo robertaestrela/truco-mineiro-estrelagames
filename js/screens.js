@@ -7,7 +7,7 @@ function go(name, p = {}, opts = {}) {
   closeNotifs();
   if (!opts.noHist && CUR && CUR !== name) HIST.push([CUR, CURP]);
   if (opts.reset) HIST = [];
-  const keep = opts.keepScroll ? ($('#view .scroll') || {}).scrollTop : 0;
+  const keep = opts.keepScroll ? ($('#view .scroll') || {}).scrollTop : 0, keepX = opts.keepScroll ? $$('#view .hscroll').map(x => x.scrollLeft) : [];
   CUR = name; CURP = p;
   const hv = $('#view .stage video'); if (hv) { HOME_VT.src = hv.getAttribute('src'); HOME_VT.t = hv.currentTime || 0; }
   const S = SCREENS[name], v = $('#view');
@@ -16,6 +16,8 @@ function go(name, p = {}, opts = {}) {
   $('#scr-game').hidden = true; v.hidden = false;
   if (S.after) S.after(p, v);
   if (keep) { const sc = $('#view .scroll'); if (sc) sc.scrollTop = keep; }
+  // fileiras horizontais (jogos, apostas) não voltam ao início quando a tela se redesenha; o jogo escolhido fica à vista
+  $$('#view .hscroll').forEach((x, i) => { if (keepX[i]) x.scrollLeft = keepX[i]; const on = x.querySelector('.gb.on'); if (on && (on.offsetLeft < x.scrollLeft || on.offsetLeft + on.offsetWidth > x.scrollLeft + x.clientWidth)) x.scrollLeft = on.offsetLeft - (x.clientWidth - on.offsetWidth) / 2; });
   playViewVideos();
 }
 const rerender = () => go(CUR, CURP, {noHist: true, keepScroll: true});
@@ -158,6 +160,7 @@ const fmtLabel = () => formatOf(ST.game, ST.variant, ST.trucoMode);
 function soonNote() {
   const g = game();
   if (g.soon) return `A ${g.name} chega em breve. Por enquanto, jogue Truco, Cacheta, Buraco, Tranca ou Poker.`;
+  if (g.id === 'sinuca') return 'A Sinuca brasileira chega em breve. Por enquanto, jogue a Bola 8.';
   return `O ${ST.variant} chega em breve. Por enquanto, jogue Pif-Paf ou Cacheta.`;
 }
 SCREENS.lobby = {cls: 'lobby', render: () => {
@@ -172,6 +175,7 @@ SCREENS.lobby = {cls: 'lobby', render: () => {
       ${btn(ok ? `Jogar · ${fmt(ST.stake)}` : 'Em breve', 'pri', 'l', `data-a="quickPlay" ${ok ? '' : 'disabled'}`, 'wide')}</section>
     ${ok ? '' : `<p class="soon-note">${soonNote()}</p>`}
     <section class="sec open"><div class="trow"><b>Mesas abertas</b><small>43 mesas</small></div>${rows.join('')}</section>
+    ${g.id === 'sinuca' ? '<p class="credit">Mesa 3D: “Pool Table” por EpicRatt (Sketchfab, CC BY 4.0), com cores alteradas.</p>' : ''}
   </div></div>${navbar('lobby')}`;
 }, after: () => swipeStakes($('#stakes')),
 click: e => {
@@ -240,6 +244,7 @@ function matchLabel() {
   const g = game(), f = fmtLabel();
   if (g.id === 'poker') return `Poker · ${f === 'Mesa de 6' ? 'mesa de 6' : '1x1'} · Sit & Go`;
   if (g.id === 'cacheta') return `${ST.variant} · 1x1`;
+  if (g.id === 'sinuca') return 'Sinuca Bola 8 · 1x1';
   if (g.id === 'tranca') return 'Tranca · 2x2';
   if (g.id === 'buraco') return `Buraco ${ST.variant} · 2x2`;
   return `Truco ${ST.variant} · ${ST.trucoMode}`;
@@ -247,13 +252,14 @@ function matchLabel() {
 function queuePeople() {
   const me = [ST.nick, ST.crew, ST.g], g = ST.game, f = fmtLabel();
   if (g === 'poker') return PK_PEOPLE.slice(0, f === 'Mesa de 6' ? 6 : 2).map((x, i) => i ? x : me);
-  if (g === 'cacheta' || (g === 'truco' && ST.trucoMode === '1x1')) return [me, ['dutra77', 'comandante', 'ele']];
+  if (g === 'cacheta' || g === 'sinuca' || (g === 'truco' && ST.trucoMode === '1x1')) return [me, ['dutra77', 'comandante', 'ele']];
   return [me, ['amanda.s', 'engenheiro', 'ela'], ['dutra77', 'comandante', 'ele'], ['rafa_10', 'piloto', 'ele']];
 }
 function queueRules() {
   const g = ST.game, f = fmtLabel(), st = ST.stake;
   if (g === 'poker') return f === 'Mesa de 6' ? `Texas Hold'em com 6 jogadores · 1.500 fichas cada, blinds sobem a cada 5 mãos. 1º leva ${fmt(prizeOf(st, 3.6))} e 2º ${fmt(prizeOf(st))}.` : `Texas Hold'em 1x1 · 1.500 fichas cada, blinds sobem a cada 5 mãos. Quem ficar com todas as fichas leva ${fmt(prizeOf(st))}.`;
   if (g === 'cacheta') return ST.variant === 'Cacheta' ? 'Você contra 1 jogador. A vira define o curinga. Bata com 9 cartas (−1 vida pro outro) ou com 10 (−2). Quem zerar as 5 vidas perde.' : 'Você contra 1 jogador. Forme 3 jogos com 9 cartas e bata. Vence quem bater 2 vezes.';
+  if (g === 'sinuca') return 'Bola 8 · você contra 1 jogador. Encaçape as 7 bolas do seu grupo e depois a 8. Arraste para mirar, puxe para dar força e solte para tacar.';
   if (g === 'tranca') return 'Você e amanda.s contra dutra77 e rafa_10. Sequência ou trinca, o 2 é curinga. 3 preto tranca o lixo, 3 vermelho vale 100. Bata com canastra limpa.';
   if (g === 'buraco') return 'Você e amanda.s contra dutra77 e rafa_10. Baixe sequências, faça canastra limpa, pegue o morto e bata. Uma mão, vence quem fizer mais pontos.';
   return ST.trucoMode === '1x1' ? 'Você contra 1 jogador, 3 cartas cada. Vence quem fizer 12 pontos.' : 'Você e sua dupla contra a outra dupla. Vence quem fizer 12 pontos.';
