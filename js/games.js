@@ -423,7 +423,9 @@ function showAnswer(kind, team, pts, rp) {
       : `<div class="smoke">${Array.from({length: 14}, (_, k) => `<i style="left:${4 + k * 7}%;bottom:${-80 + (k % 4) * 60}px;--dx:${(k % 2 ? 1 : -1) * (16 + (k % 3) * 22)}px;--s:${(1.3 + (k % 3) * .4).toFixed(2)};animation-delay:${(.1 + (k % 6) * .1).toFixed(2)}s"></i>`).join('')}</div>`;
     c.insertAdjacentHTML('beforeend', embers);
     const ct = c.querySelector('.content');
-    ct.innerHTML = `<span class="pill">${who}</span><img class="word ans" src="${A}ui/word_${word}.webp" alt="${word.toUpperCase()}"><span class="pill vale">${tail}</span>`;
+    // pontos para o nosso lado (eles correram) = pílula verde
+    const good = !acc && team === 1;
+    ct.innerHTML = `<span class="pill">${who}</span><img class="word ans" src="${A}ui/word_${word}.webp" alt="${word.toUpperCase()}"><span class="pill vale${good ? ' pos' : ''}">${tail}</span>`;
     c.classList.add(acc ? 'acc' : 'run');
     setTimeout(res, acc ? 1700 : 2300);
   });
