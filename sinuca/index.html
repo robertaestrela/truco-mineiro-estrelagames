@@ -21,7 +21,7 @@
   --blue:#3b74f5; --blue-top:#5e95ff; --blue-bg:#2a57d6; --ok:#2cc160; --ok-text:#52de7e;
   --red:#e5484d; --red-top:#ef4452; --red-bg:#c72c3d; --gold:#ffc841;
   --g-sinuca:#2fa35a; --felt:#1f3564; --felt-l:#2f5aa8; --felt-d:#0e1830;
-  --c-engenheiro:#4fb3ff; --c-comandante:#f5c542; --c-piloto:#ff5a36; --c-navegador:#e86bff; --c-explorador:#4dffb8; --c-bar:#ff9f43; --c-reis:#34d399;
+  --c-engenheiro:#4fb3ff; --c-comandante:#f5c542; --c-piloto:#ff5a36; --c-navegador:#e86bff; --c-explorador:#4dffb8; --c-bar:#ff9f43; --c-reis:#34d399; --c-gamer:#3d8bff;
   --f-display:"Sora", "Inter", system-ui, sans-serif; --f-ui:"Inter", system-ui, -apple-system, sans-serif;
 }
 html,body{height:100%}
@@ -282,13 +282,13 @@ const threeReady = Promise.all(['three', 'three/addons/environments/RoomEnvironm
   .catch(err => { console.error(err); return false; });
 
 /* ---------- data ---------- */
-const CREW = {engenheiro:'var(--c-engenheiro)', comandante:'var(--c-comandante)', piloto:'var(--c-piloto)', navegador:'var(--c-navegador)', explorador:'var(--c-explorador)', bar:'var(--c-bar)', reis:'var(--c-reis)'};
+const CREW = {engenheiro:'var(--c-engenheiro)', comandante:'var(--c-comandante)', piloto:'var(--c-piloto)', navegador:'var(--c-navegador)', explorador:'var(--c-explorador)', bar:'var(--c-bar)', reis:'var(--c-reis)', gamer:'var(--c-gamer)'};
 const STAKES = [{v:.25, q:154, tag:'Iniciante'}, {v:1, q:158}, {v:5, q:67}, {v:10, q:41}, {v:25, q:12}];
 const PEOPLE = [['dutra77','comandante','ele'],['rafa_10','piloto','ele'],['amanda.s','engenheiro','ela'],['lu.reis','explorador','ela'],['af_07','navegador','ele']];
 const BOT = {name:'dutra77', crew:'comandante', g:'ele'};
 const ST = {stake:1, saldo:1250, sound:true, mic:false, matches:0};
 // embedded in the main EstrelaGames app: skip this lobby, report results/exit to the parent with postMessage
-// #embed-<stake> or #embed=<stake>&nick=&crew=&g=&opp=&q=0 (q=0 skips the queue)
+// #embed-<stake> or #embed=<stake>&nick=&crew=&g=&opp=&mesa=&q=0 (mesa = the app's table id, q=0 skips the queue)
 const EMBED = /^#embed/.test(location.hash), EP = {};
 if (EMBED) {
   const h = location.hash.slice(1), m = h.match(/^embed[-=]?([\d.]+)?/);
