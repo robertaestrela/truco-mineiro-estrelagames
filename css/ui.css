@@ -39,7 +39,7 @@ svg{display:block}
 .hdr{position:relative;flex:none;height:64px;display:flex;align-items:center;gap:4px;padding:8px 12px;background:var(--bg-subtle);overflow:hidden;z-index:20}
 .hdr::before{content:"";position:absolute;left:48px;top:-70px;width:280px;height:140px;border-radius:50%;background:var(--glow-blue);filter:blur(60px);opacity:.15;pointer-events:none}
 .hdr .side{position:relative;flex:1;min-width:0;display:flex;align-items:center;gap:4px}
-.hdr .logo{width:36px;height:36px;display:grid;place-items:center;flex:none}
+.hdr .logo{width:24px;height:36px;display:grid;place-items:center;flex:none}
 .hdr .logo img{width:25px;height:24px}
 .cpill{flex:1;min-width:0;height:34px;display:flex;align-items:center;gap:2px;padding:4px;border-radius:999px;background:linear-gradient(90deg,#52de7e1a,#283c5206),var(--bga-strong-50);box-shadow:inset 0 0 0 1px var(--border-muted);overflow:hidden}
 .cpill.bonus{padding:4px 8px 4px 4px;background:linear-gradient(90deg,#283c5206,#ffc8411a),var(--bga-strong-50)}
