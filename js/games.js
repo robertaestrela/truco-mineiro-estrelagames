@@ -384,7 +384,7 @@ function gtoast(msg) { const g = $('#gtoast'); if (!g) return; $('#gtoastTxt').t
 function showCall(p, idx, youRespond) {
   return new Promise(res => {
     const P = G.players[p];
-    const video = P.crew === 'nenhum' ? `<img class="empty" src="${A}ui/avatar_empty.webp" alt="">` : `<video src="${A}video/call/${P.crew}_${P.g}.mp4" autoplay muted loop playsinline preload="auto" poster="${photo(P.crew, P.g)}"></video>`;
+    const video = P.crew === 'nenhum' ? `<img class="empty" src="${A}ui/avatar_empty.webp" alt="">` : `<video src="${A}video/call/${P.crew}_${P.g}.mp4" autoplay muted loop playsinline preload="auto" poster="${A}video/call/${P.crew}_${P.g}.webp"></video>`;
     const embers = Array.from({length: 14}, (_, k) => `<i class="ember" style="left:${5 + k * 6.6}%;--dx:${(k % 2 ? 1 : -1) * (10 + (k % 3) * 12)}px;animation-delay:${(.12 + k * .1).toFixed(2)}s"></i>`).join('');
     const nextLabel = idx < 4 ? 'Pedir ' + WORD_TXT[idx + 1] + '!' : '';
     const who = p === 0 ? 'Você pediu' : `${P.name} pediu`;
@@ -418,7 +418,7 @@ function showAnswer(kind, team, pts, rp) {
     // o círculo passa a mostrar quem respondeu
     const R = G.players[rp];
     if (R) { let w = c.querySelector('.who'); if (!w) { c.querySelector('.content').insertAdjacentHTML('beforebegin', '<div class="who"></div>'); w = c.querySelector('.who'); }
-      w.innerHTML = R.crew === 'nenhum' ? `<img class="empty" src="${A}ui/avatar_empty.webp" alt="">` : `<video src="${A}video/call/${R.crew}_${R.g}.mp4" autoplay muted loop playsinline preload="auto" poster="${photo(R.crew, R.g)}"></video>`; }
+      w.innerHTML = R.crew === 'nenhum' ? `<img class="empty" src="${A}ui/avatar_empty.webp" alt="">` : `<video src="${A}video/call/${R.crew}_${R.g}.mp4" autoplay muted loop playsinline preload="auto" poster="${A}video/call/${R.crew}_${R.g}.webp"></video>`; }
     const embers = acc ? Array.from({length: 22}, (_, k) => `<i class="ember hot" style="left:${3 + k * 4.4}%;--dx:${(k % 2 ? 1 : -1) * (14 + (k % 4) * 14)}px;animation-delay:${(k * .05).toFixed(2)}s"></i>`).join('')
       : `<div class="smoke">${Array.from({length: 14}, (_, k) => `<i style="left:${4 + k * 7}%;bottom:${-80 + (k % 4) * 60}px;--dx:${(k % 2 ? 1 : -1) * (16 + (k % 3) * 22)}px;--s:${(1.3 + (k % 3) * .4).toFixed(2)};animation-delay:${(.1 + (k % 6) * .1).toFixed(2)}s"></i>`).join('')}</div>`;
     c.insertAdjacentHTML('beforeend', embers);

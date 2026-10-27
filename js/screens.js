@@ -210,10 +210,12 @@ Object.assign(ACT, {
    HOME COM SKIN (aba Jogos) · palco com o vídeo do personagem
    ====================================================================== */
 const stageVid = (c = ST.crew, g = ST.g) => `${A}video/stage/${c}_${g}.mp4`;
+// imagem de espera = primeiro quadro do próprio vídeo (egames-tools/make_posters.py), nunca a foto de perfil
+const stagePoster = (c = ST.crew, g = ST.g) => `${A}video/stage/${c}_${g}.webp`;
 SCREENS.jogos = {cls: 'home', render: () => {
   if (!hasSkin()) return SCREENS.lobby.render();
   const g = game();
-  return `${header()}<div class="stage"><video src="${stageVid()}" autoplay muted loop playsinline preload="auto" poster="${photo(ST.crew, ST.g)}"></video><i class="shade"></i>
+  return `${header()}<div class="stage"><video src="${stageVid()}" autoplay muted loop playsinline preload="auto" poster="${stagePoster()}"></video><i class="shade"></i>
     <div class="ct"><div class="gl">${GAMES.map(x => gameBlock(x, x.id === g.id, `data-hgame="${x.id}"`)).join('')}</div>
       <div class="acts"><button class="atile" data-a="treino">${ic('joystick')}Treino</button>${btn(`Jogar ${g.name}`, 'pri', 'l', 'data-a="homePlay"')}</div></div></div>
     ${ST.reward && ST.reward.later ? `<span class="hint-pill rw-hint">Recompensa guardada · toque no seu perfil</span>` : ''}

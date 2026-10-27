@@ -96,7 +96,14 @@ function openPicker(id, back) {
   if (packActive(id)) { PICK.c = ST.crew; PICK.g = ST.g; }
   else if (ST.reward && ST.reward.pack === id && ST.reward.taken) { PICK.c = ST.reward.c; PICK.g = ST.reward.g; }
   else [PICK.c, PICK.g] = PACKS[id].def;
+  warmPack(id);
   go('picker');
+}
+// aquece o cache dos personagens do pacote: ao trocar, o palco já tem o primeiro quadro e o vídeo prontos (sem piscar)
+function warmPack(id) {
+  const p = PACKS[id];
+  const list = id === 'estelar' ? p.roles.flatMap(r => [[r, 'ele'], [r, 'ela']]) : p.solo ? p.roles.map(r => [r, 'ele']) : [[p.roles[0], 'ele'], [p.roles[0], 'ela']];
+  list.forEach(([c, g]) => { new Image().src = stagePoster(c, g); fetch(stageVid(c, g)).catch(() => {}); });
 }
 SCREENS.picker = {cls: 'picker-scr', render: () => {
   const p = PACKS[PICK.pack], estelar = PICK.pack === 'estelar', cc = crewColor(PICK.c, PICK.g);
@@ -104,7 +111,7 @@ SCREENS.picker = {cls: 'picker-scr', render: () => {
   return `<div class="pg-top">${header()}${ptop(p.page, null, 'pickBack')}</div>
     <div class="scr picker" style="position:relative;inset:auto;flex:1;min-height:0">
       ${tabs([['ele', 'Ele'], ['ela', 'Ela']], PICK.g, PICK.g === 'ela' ? 'rosa' : '', 'pg')}
-      <div class="stg" style="--cc:${cc}"><video src="${stageVid(PICK.c, PICK.g)}" autoplay muted loop playsinline preload="auto" poster="${photo(PICK.c, PICK.g)}"></video>
+      <div class="stg" style="--cc:${cc}"><video src="${stageVid(PICK.c, PICK.g)}" autoplay muted loop playsinline preload="auto" poster="${stagePoster(PICK.c, PICK.g)}"></video>
         <button class="arrow p" data-a="pickStep:-1" aria-label="Anterior">${svg('i-chev-l-light')}</button><button class="arrow n" data-a="pickStep:1" aria-label="Próximo">${svg('i-chev-r-light')}</button>
         <div class="ident"><b>${crewName(PICK.c, PICK.g)}</b><small><i></i>${ROLE_SUB[PICK.c]}</small></div></div>
       <div class="crew">${crew.map(([c, g]) => `<button class="${c === PICK.c && g === PICK.g ? 'on' : ''}" style="--cc:${crewColor(c, g)}" data-pc="${c}|${g}" aria-label="${crewName(c, g)}"><img src="${photo(c, g)}" alt=""></button>`).join('')}</div>
