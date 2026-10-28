@@ -1372,9 +1372,9 @@ ACT.leaveGo = () => {
   endAllGames(); $('#overlay').innerHTML = '';
   if (ser) { go('batalhas', {}, {noHist: true, reset: true}); toast(`Você saiu da ${ser.b.name}`); } else leaveGame();
 };
-const DECKS = [['estrela', 'Estrela'], ['tradicional', 'Tradicional vermelho']];
+const DECKS = [['estrela', 'Estrela']]; // só o verso Estrela (o Tradicional vermelho saiu em 28/10, como no Figma)
 function deckBack(k, size = 'S') { const cur = ST.deck; ST.deck = k; const h = cardHTML(null, size, true); ST.deck = cur; return h; }
-function refreshBacks() { document.querySelectorAll('.card.back').forEach(el => { el.classList.remove('dk-tradicional'); if (ST.deck !== 'estrela') el.classList.add('dk-' + ST.deck); }); }
+function refreshBacks() { document.querySelectorAll('.card.back').forEach(el => { [...el.classList].filter(c => c.startsWith('dk-')).forEach(c => el.classList.remove(c)); if (ST.deck !== 'estrela') el.classList.add('dk-' + ST.deck); }); }
 /* ---------- customize-sheet · Personalizar (avatar · mesa · baralho) · muda na hora ---------- */
 const MESAS = [['azul', 'Azul', null], ['vermelha', 'Vermelha', null], ['bar', 'Bar', null], ['reis', 'Reis do baralho', 'reis'], ['gamer', 'Nobru & Inhui', 'nobru']];
 function personalizar() {
