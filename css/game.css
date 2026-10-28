@@ -167,9 +167,10 @@
 .call{position:absolute;inset:0;z-index:70;overflow:hidden;pointer-events:auto}
 .call .veil2{position:absolute;inset:0;background:rgba(0,0,0,.7);animation:fade .15s ease-out both}
 .call .glow{position:absolute;left:0;right:0;top:56%;bottom:0;background:linear-gradient(180deg,rgba(255,90,54,0),rgba(255,90,54,.5));mix-blend-mode:screen;animation:fade .3s .06s ease-out both}
-.call .fire{position:absolute;left:-13%;width:126%;mix-blend-mode:screen;background-size:100% auto;background-repeat:no-repeat;background-position:top center}
-.call .fireA{top:52%;height:113%;background-image:url(../assets/fx/fogo-A.webp);animation:rise .5s ease-out both, breathe 1.6s .5s ease-in-out infinite alternate}
-.call .fireB{top:58%;height:100%;background-image:url(../assets/fx/fogo-B.webp);transform:scaleX(-1);animation:riseB .55s .03s ease-out both, breatheB 1.4s .55s ease-in-out infinite alternate}
+/* fogo com transparência de verdade (o preto do arquivo virou alfa): sem blend, para o overlay não esconder a mesa embaixo */
+.call .fire{position:absolute;left:-13%;width:126%;background-size:100% auto;background-repeat:no-repeat;background-position:top center}
+.call .fireA{top:52%;height:113%;background-image:url(../assets/fx/fogo-A-alpha.webp);animation:rise .5s ease-out both, breathe 1.6s .5s ease-in-out infinite alternate}
+.call .fireB{top:58%;height:100%;background-image:url(../assets/fx/fogo-B-alpha.webp);transform:scaleX(-1);animation:riseB .55s .03s ease-out both, breatheB 1.4s .55s ease-in-out infinite alternate}
 @keyframes rise{from{transform:translateY(100%)}70%{transform:translateY(-2%)}to{transform:none}}
 @keyframes riseB{from{transform:scaleX(-1) translateY(100%)}70%{transform:scaleX(-1) translateY(-3%)}to{transform:scaleX(-1)}}
 @keyframes breathe{from{transform:translateY(0)}to{transform:translateY(-1.4%)}}
