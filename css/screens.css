@@ -79,7 +79,7 @@
 
 /* ---------- Loja ---------- */
 .pg-top{flex:none;display:flex;flex-direction:column;gap:2px}
-.loja .content,.pack .content{display:flex;flex-direction:column;gap:16px;padding:0 8px 96px}
+.loja .content,.pack .content,.diamantes .content{display:flex;flex-direction:column;gap:16px;padding:0 8px 96px}
 .chips{gap:8px;padding:4px 8px}
 .chip{flex:none;height:36px;display:flex;align-items:center;gap:6px;padding:0 12px 0 8px;border-radius:12px;background:var(--bga-strong-50);box-shadow:inset 0 0 0 1px var(--border-muted);font:500 12px/1 var(--f-ui);color:var(--text-default);white-space:nowrap}
 .chip .ic{width:20px;height:20px}
@@ -434,3 +434,43 @@
 .sinuca-scr{z-index:40;background:#05080c;padding-bottom:env(safe-area-inset-bottom,0px)}
 .sinuca-scr iframe{display:block;width:100%;height:100%;border:0;background:#05080c}
 .lobby .credit{margin:0;padding:0 16px;font:500 9px/1.4 var(--f-ui);color:var(--text-subtle);opacity:.8;text-align:center}
+
+/* ---------- diamantes (Figma Loja › 6 · Diamantes D01–D07) ---------- */
+.ic.dia{width:14px;height:14px;flex:none}
+.btn .ic.dia{width:16px;height:16px;margin-right:-4px}
+.spk.S .art .price{display:flex;align-items:center;gap:2px;padding:2px 8px 2px 4px}
+.uopt .pr{display:flex;align-items:center;gap:4px}
+.uopt .pr .ic.dia{width:20px;height:20px}
+.pk-box .unote{margin:0;font:500 10px/1.3 var(--f-ui);color:var(--text-muted)}
+/* _Diamantes/saldo: o mesmo vidro do saldo do header, com tom azul do diamante */
+.ptop .dpill{flex:none;width:auto;gap:4px;background:linear-gradient(90deg,#4fb8ff1f,#283c5206),var(--bga-strong-50)}
+.ptop .dpill .t{flex:none}
+.dsaldo{display:flex;align-items:center;gap:12px;padding:16px;border-radius:16px;background:var(--bg-raised)}
+.dsaldo .ic{width:48px;height:48px}
+.dsaldo .tx{display:flex;flex-direction:column;gap:4px}
+.dsaldo small{font:500 12px/1 var(--f-ui);color:var(--text-muted)}
+.dsaldo b{font:700 24px/1.2 var(--f-display)}
+.dgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.dpack{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;padding:16px 12px 12px;border-radius:16px;background:var(--bga-strong-50);box-shadow:inset 0 0 0 1px var(--border-muted)}
+.dpack .tag{position:absolute;right:8px;top:8px}
+.dpack .art{width:80px;height:80px;object-fit:contain}
+.dpack b{font:700 24px/1.2 var(--f-display)}
+.dpack small{font:500 10px/1 var(--f-ui);color:var(--text-muted)}
+.dpack .btn{width:100%;margin-top:8px}
+.diamantes .note{margin:0;font:500 12px/1.3 var(--f-ui);color:var(--text-muted)}
+/* D03 · confirmação da loja do celular (referência da tela do sistema) */
+.native .nprod{display:flex;align-items:center;gap:12px;width:100%}
+.native .nic{width:56px;height:56px;border-radius:12px;display:grid;place-items:center;background:var(--bg-raised);flex:none}
+.native .nic img{width:36px;height:36px}
+.native .nprod .tx{display:flex;flex-direction:column;gap:4px;min-width:0}
+.native .nprod b{font:500 14px/1.2 var(--f-ui)}
+.native .nprod small{font:500 10px/1 var(--f-ui);color:var(--text-muted)}
+.native .ndet{width:100%;border-radius:12px;background:var(--bg-raised)}
+.native .ndet>div{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;font:500 12px/1.2 var(--f-ui)}
+.native .ndet>div+div{box-shadow:inset 0 1px 0 var(--border-muted)}
+.native .ndet small{font:inherit;color:var(--text-muted)}
+.native .ndet b{font:600 16px/1.2 var(--f-display)}
+.native .nnote{font-size:10px;line-height:1.3}
+/* D04 · "Você recebeu": brilho na cor do diamante */
+.unlock .hero .glw.dia{background:radial-gradient(circle,#4fb8ff7a,#4fb8ff00 70%)}
+.unlock .hero .dart{position:absolute;left:50%;top:32px;width:144px;height:144px;margin-left:-72px;object-fit:contain}

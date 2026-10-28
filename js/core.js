@@ -71,7 +71,8 @@ const ST = {
   game: 'truco', variant: 'Mineiro', trucoMode: '2x2', stake: 1,
   crew: 'nenhum', g: 'ela', owned: {nobru: false, magia: false, reis: false, estelar: false}, pack: 'nobru',
   mesaChoice: 'vermelha', mesaPaulista: 'azul', deck: 'estrela', mic: false,
-  unread: 2, reward: null, rewardsWon: 18, series: null, training: false
+  unread: 2, reward: null, rewardsWon: 18, series: null, training: false,
+  diamonds: 0 // moeda da Loja (só cosmético) · comprada em Loja › Diamantes
 };
 const hasSkin = () => ST.crew !== 'nenhum';
 

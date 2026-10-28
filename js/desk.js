@@ -46,7 +46,7 @@ function dkHeader() {
 const DK_ACCOUNT = [['profile', 'user', 'Perfil'], ['wallet', 'coins', 'Fichas'], ['history', 'timer', 'Histórico'], ['ranking', 'podium', 'Ranking'], ['settings', 'gear', 'Ajustes']];
 function dkActive() {
   const c = CUR;
-  if (c === 'pacote' || c === 'picker') return 'loja';
+  if (c === 'pacote' || c === 'picker' || c === 'diamantes') return 'loja';
   if (c === 'cbattle' || c === 'sala') return 'batalhas';
   if (c === 'rankGame') return 'lobby';
   if (c === 'jogos' && !hasSkin()) return 'lobby';
