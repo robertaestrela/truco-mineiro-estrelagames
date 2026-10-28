@@ -157,11 +157,11 @@
 .picker .ident{position:relative;z-index:2;display:flex;flex-direction:column;gap:2px}
 .picker .ident b{font:700 20px/1.2 var(--f-display);letter-spacing:-.01em;text-transform:uppercase}
 .picker .ident small{display:flex;align-items:center;gap:6px;font:500 10px/1.2 var(--f-ui);color:var(--text-muted)}
-.picker .ident small i{width:8px;height:8px;border-radius:50%;background:var(--cc);flex:none}
+.picker .ident small i{width:8px;height:8px;border-radius:50%;background:var(--btn-secondary-border);flex:none}
 .picker .crew{flex:none;display:flex;align-items:center;justify-content:center;gap:12px;height:56px}
 .picker .crew button{width:48px;height:48px;border-radius:24px;overflow:hidden;background:var(--cc);box-shadow:inset 0 0 0 1px var(--border-muted);opacity:.55;flex:none;transition:all .2s}
 .picker .crew button img{width:100%;height:100%;object-fit:cover;object-position:center top}
-.picker .crew button.on{width:56px;height:56px;border-radius:28px;opacity:1;box-shadow:0 0 0 2.5px var(--cc),0 0 14px var(--cc)}
+.picker .crew button.on{width:56px;height:56px;border-radius:28px;opacity:1;box-shadow:0 0 0 2.5px var(--btn-secondary-border),0 0 14px var(--glow-info)} /* seleção = ação: azul do DS, igual ao Figma */
 .picker .acts{flex:none;display:flex;gap:8px}
 .picker .acts .btn{flex:1}
 
@@ -421,7 +421,7 @@
 .chat .feed>*,.room-chat>*{flex-shrink:0}
 
 
-.rkf{display:flex;align-items:center;gap:8px;height:64px;flex:none}
+.rkf{display:flex;align-items:center;gap:8px;height:40px;flex:none;margin:0 -8px;padding:0 8px}
 .rkf .chip{flex:none}
 .gb.mini{flex:1;width:auto;min-width:0;height:64px;padding:2px 0 4px;gap:2px;background:none;box-shadow:none;font-size:9px;overflow:visible}
 .gb.mini .ic{width:36px;height:36px}

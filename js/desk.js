@@ -28,7 +28,8 @@ function dkApply() {
 }
 function dkFit() {
   const a = $('.stage-wrap'), ph = $('#phone');
-  const s = Math.min(1.25, (a.clientHeight - 48) / DK_H, (a.clientWidth - 48) / DK_W);
+  // no máximo 456×812 (coluna do Figma em 1920×1080); diminui em telas menores
+  const s = Math.min(812 / DK_H, (a.clientHeight - 48) / DK_H, (a.clientWidth - 48) / DK_W);
   ph.style.transform = `scale(${Math.max(.5, s)})`;
 }
 
@@ -43,7 +44,7 @@ function dkHeader() {
 }
 
 /* ---------- menu da esquerda ---------- */
-const DK_ACCOUNT = [['profile', 'user', 'Perfil'], ['wallet', 'coins', 'Fichas'], ['history', 'timer', 'Histórico'], ['ranking', 'podium', 'Ranking'], ['settings', 'gear', 'Ajustes']];
+const DK_ACCOUNT = [['profile', 'user', 'Perfil'], ['wallet', 'coins', 'Fichas'], ['history', 'timer', 'Histórico'], ['ranking', 'trophy', 'Ranking'], ['settings', 'gear', 'Ajustes']]; // Ranking = troféu (como no menu do Figma)
 function dkActive() {
   const c = CUR;
   if (c === 'pacote' || c === 'picker' || c === 'diamantes') return 'loja';

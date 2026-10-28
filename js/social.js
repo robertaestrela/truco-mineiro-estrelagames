@@ -297,7 +297,7 @@ const raceHTML = () => `<div class="race"><i class="glw"></i><i class="alt" styl
 const meRow = gname => `<div class="rme"><div class="rrow me"><em>12</em>${ST.crew === 'nenhum' ? av('nenhum', 'ela', 's') : av(ST.crew, ST.g, 's')}<span class="tx"><b>Você · @${esc(ST.nick)}</b><small>${gname || 'Truco'} · 342 vitórias</small></span><span class="pts"><b>3.120</b><small>+4</small></span></div></div>`;
 SCREENS.ranking = {cls: 'rk', render: () => `<div class="pg-top">${header()}${ptop('Ranking', 'Fecha em 2d 14h · ranking da semana')}</div>
   <div class="scroll"><div class="content">${tabs([['semanal', 'Semanal'], ['geral', 'Geral']], RK.geral, '', 'rkg')}
-    <div class="rkf"><button class="chip big ${RK.gfilter === 'todos' ? 'on' : ''}" data-rkf="todos">${ic('all')}Todos</button>${GAMES.map(x => gameBlock(x, RK.gfilter === x.id, `data-rkf="${x.id}"`).replace('class="gb ', 'class="gb mini ')).join('')}</div>
+    <div class="hscroll rkf"><button class="chip big ${RK.gfilter === 'todos' ? 'on' : ''}" data-rkf="todos">${ic('all')}Todos</button>${GAMES.map(x => `<button class="chip big ${RK.gfilter === x.id ? 'on' : ''}" data-rkf="${x.id}">${ic(GAME_ICON[x.id])}${x.name}</button>`).join('')}</div>
     ${raceHTML()}
     <div class="rlist">${RANK_ROWS.map((r, k) => rowHTML(r, k + 4, RK.gfilter === 'todos' ? '' : gameById(RK.gfilter).name)).join('')}</div></div></div>
   ${meRow(RK.gfilter === 'todos' ? '' : gameById(RK.gfilter).name)}`,
