@@ -390,7 +390,8 @@ function placeBubble(b, at) {
   b.style.left = Math.round(Math.max(8, Math.min(367 - w, x))) + 'px';
   b.style.top = Math.round(Math.max(8, y)) + 'px';
 }
-const letters = w => [...w].map((ch, i) => `<i style="--i:${i}">${ch === ' ' ? '&nbsp;' : esc(ch)}</i>`).join('');
+// nas marcas traduzidas (Liquid) a palavra é traduzida antes de virar letras soltas
+const letters = w => [...(typeof window.i18n === 'function' ? window.i18n(w) : w)].map((ch, i) => `<i style="--i:${i}">${ch === ' ' ? '&nbsp;' : esc(ch)}</i>`).join('');
 // kind: chamada | pos | neg · a palavra é sempre em caixa alta (CSS)
 function sayAt(box, p, kind, word, sub) {
   const at = seatAnchor(p);
