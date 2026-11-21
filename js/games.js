@@ -1525,7 +1525,7 @@ const decksOwned = () => DECKS.filter(([k, l, need]) => !need || ST.owned[need])
 function deckBack(k, size = 'S') { const cur = ST.deck; ST.deck = k; const h = cardHTML(null, size, true); ST.deck = cur; return h; }
 function refreshBacks() { document.querySelectorAll('.card.back').forEach(el => { [...el.classList].filter(c => c.startsWith('dk-')).forEach(c => el.classList.remove(c)); if (ST.deck !== 'estrela') el.classList.add('dk-' + ST.deck); }); }
 /* ---------- customize-sheet · Personalizar (avatar · mesa · baralho) · muda na hora ---------- */
-const MESAS = [['azul', 'Azul', null], ['vermelha', 'Vermelha', null], ['bar', 'Bar', null], ['reis', 'Reis do baralho', 'reis'], ['laje', 'Resenha da Laje', 'laje'], ['portaria', 'Plantão da Portaria', 'portaria'], ['live', 'Live do Baralho', 'live'], ['gamer', 'Nobru & Inhui', 'nobru'], ['assalto', 'O Grande Assalto', 'assalto']];
+const MESAS = [['azul', 'Azul', null], ['vermelha', 'Vermelha', null], ['bar', 'Bar', null], ['reis', 'Reis do baralho', 'reis'], ['laje', 'Resenha da Laje', 'laje'], ['portaria', 'Plantão da Portaria', 'portaria'], ['live', 'Live do Baralho', 'live'], ['assalto', 'O Grande Assalto', 'assalto'], ['gamer', 'Nobru & Inhui', 'nobru']];
 function personalizar() {
   const tile = (on, locked, inner, label, data) => `<div role="button" tabindex="0" class="ctile ${on ? 'on' : ''} ${locked ? 'locked' : ''}" ${data}><span class="mini">${inner}${locked ? tag('Loja') : ''}</span><span class="lb">${label}</span></div>`;
   const avs = [['nenhum', 'ela', null]];
